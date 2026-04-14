@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --spacing-button-placeholder: calc(
+    (var(--vxe-ui-button-height-default) - 1lh) / 2
+  );
+  --spacing-header-offset: calc(
+    var(--vxe-ui-button-height-default) + var(--spacing) * 2
+  );
+  --text-default: var(--vxe-ui-font-size-default);
+}
+
+.vxe-table--render-default .vxe-row-group-cell {
+  @apply pl-1;
+}
+
+.vxe-tabs {
+  @apply h-full;
+}
+
+.vxe-tabs-header--wrapper.type--default.pos--left {
+  @apply pt-header-offset pr-2;
+}
+
+.vxe-tabs-header--wrapper.type--default.pos--left::after {
+  @apply hidden;
+}
+
+.vxe-tabs-pane--item.is--visible {
+  @apply flex flex-col overflow-hidden;
+}

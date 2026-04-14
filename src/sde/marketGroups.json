@@ -1,0 +1,2671 @@
+{
+  "4": {
+    "nameEn": "Ships",
+    "nameZh": "舰船",
+    "ancestors": [
+      4
+    ]
+  },
+  "5": {
+    "nameEn": "Standard Frigates",
+    "nameZh": "标准护卫舰",
+    "ancestors": [
+      5,
+      1361,
+      4
+    ]
+  },
+  "6": {
+    "nameEn": "Standard Cruisers",
+    "nameZh": "标准巡洋舰",
+    "ancestors": [
+      6,
+      1367,
+      4
+    ]
+  },
+  "7": {
+    "nameEn": "Standard Battleships",
+    "nameZh": "标准战列舰",
+    "ancestors": [
+      7,
+      1376,
+      4
+    ]
+  },
+  "8": {
+    "nameEn": "Standard Haulers",
+    "nameZh": "标准运载舰",
+    "ancestors": [
+      8,
+      1382,
+      4
+    ]
+  },
+  "61": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      61,
+      5,
+      1361,
+      4
+    ]
+  },
+  "64": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      64,
+      5,
+      1361,
+      4
+    ]
+  },
+  "72": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      72,
+      5,
+      1361,
+      4
+    ]
+  },
+  "73": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      73,
+      6,
+      1367,
+      4
+    ]
+  },
+  "74": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      74,
+      6,
+      1367,
+      4
+    ]
+  },
+  "75": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      75,
+      6,
+      1367,
+      4
+    ]
+  },
+  "76": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      76,
+      6,
+      1367,
+      4
+    ]
+  },
+  "77": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      77,
+      5,
+      1361,
+      4
+    ]
+  },
+  "78": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      78,
+      7,
+      1376,
+      4
+    ]
+  },
+  "79": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      79,
+      7,
+      1376,
+      4
+    ]
+  },
+  "80": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      80,
+      7,
+      1376,
+      4
+    ]
+  },
+  "81": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      81,
+      7,
+      1376,
+      4
+    ]
+  },
+  "82": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      82,
+      8,
+      1382,
+      4
+    ]
+  },
+  "83": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      83,
+      8,
+      1382,
+      4
+    ]
+  },
+  "84": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      84,
+      8,
+      1382,
+      4
+    ]
+  },
+  "85": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      85,
+      8,
+      1382,
+      4
+    ]
+  },
+  "391": {
+    "nameEn": "Shuttles",
+    "nameZh": "穿梭机",
+    "ancestors": [
+      391,
+      4
+    ]
+  },
+  "393": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      393,
+      391,
+      4
+    ]
+  },
+  "394": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      394,
+      391,
+      4
+    ]
+  },
+  "395": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      395,
+      391,
+      4
+    ]
+  },
+  "396": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      396,
+      391,
+      4
+    ]
+  },
+  "399": {
+    "nameEn": "Interceptors",
+    "nameZh": "截击舰",
+    "ancestors": [
+      399,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "400": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      400,
+      399,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "401": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      401,
+      399,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "402": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      402,
+      399,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "403": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      403,
+      399,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "420": {
+    "nameEn": "Covert Ops",
+    "nameZh": "隐形特勤舰",
+    "ancestors": [
+      420,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "421": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      421,
+      420,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "422": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      422,
+      420,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "423": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      423,
+      420,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "424": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      424,
+      420,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "432": {
+    "nameEn": "Assault Frigates",
+    "nameZh": "突击护卫舰",
+    "ancestors": [
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "433": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      433,
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "434": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      434,
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "435": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      435,
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "436": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      436,
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "437": {
+    "nameEn": "Logistics",
+    "nameZh": "后勤舰",
+    "ancestors": [
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "438": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      438,
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "439": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      439,
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "440": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      440,
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "441": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      441,
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "448": {
+    "nameEn": "Heavy Assault Cruisers",
+    "nameZh": "重型突击巡洋舰",
+    "ancestors": [
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "449": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      449,
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "450": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      450,
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "451": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      451,
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "452": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      452,
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "464": {
+    "nameEn": "Standard Destroyers",
+    "nameZh": "标准驱逐舰",
+    "ancestors": [
+      464,
+      1372,
+      4
+    ]
+  },
+  "465": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      465,
+      464,
+      1372,
+      4
+    ]
+  },
+  "466": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      466,
+      464,
+      1372,
+      4
+    ]
+  },
+  "467": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      467,
+      464,
+      1372,
+      4
+    ]
+  },
+  "468": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      468,
+      464,
+      1372,
+      4
+    ]
+  },
+  "469": {
+    "nameEn": "Standard Battlecruisers",
+    "nameZh": "标准战列巡洋舰",
+    "ancestors": [
+      469,
+      1374,
+      4
+    ]
+  },
+  "470": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      470,
+      469,
+      1374,
+      4
+    ]
+  },
+  "471": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      471,
+      469,
+      1374,
+      4
+    ]
+  },
+  "472": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      472,
+      469,
+      1374,
+      4
+    ]
+  },
+  "473": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      473,
+      469,
+      1374,
+      4
+    ]
+  },
+  "494": {
+    "nameEn": "Mining Barges",
+    "nameZh": "采矿驳船",
+    "ancestors": [
+      494,
+      1384,
+      4
+    ]
+  },
+  "629": {
+    "nameEn": "Transport Ships",
+    "nameZh": "运输舰",
+    "ancestors": [
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "630": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      630,
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "631": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      631,
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "632": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      632,
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "633": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      633,
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "761": {
+    "nameEn": "Dreadnoughts",
+    "nameZh": "无畏舰",
+    "ancestors": [
+      761,
+      1381,
+      4
+    ]
+  },
+  "762": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      762,
+      3509,
+      761,
+      1381,
+      4
+    ]
+  },
+  "763": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      763,
+      3509,
+      761,
+      1381,
+      4
+    ]
+  },
+  "764": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      764,
+      3509,
+      761,
+      1381,
+      4
+    ]
+  },
+  "765": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      765,
+      3509,
+      761,
+      1381,
+      4
+    ]
+  },
+  "766": {
+    "nameEn": "Freighters",
+    "nameZh": "货舰",
+    "ancestors": [
+      766,
+      1381,
+      4
+    ]
+  },
+  "767": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      767,
+      766,
+      1381,
+      4
+    ]
+  },
+  "768": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      768,
+      766,
+      1381,
+      4
+    ]
+  },
+  "769": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      769,
+      766,
+      1381,
+      4
+    ]
+  },
+  "770": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      770,
+      766,
+      1381,
+      4
+    ]
+  },
+  "812": {
+    "nameEn": "Titans",
+    "nameZh": "泰坦",
+    "ancestors": [
+      812,
+      1381,
+      4
+    ]
+  },
+  "813": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      813,
+      812,
+      1381,
+      4
+    ]
+  },
+  "814": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      814,
+      812,
+      1381,
+      4
+    ]
+  },
+  "815": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      815,
+      812,
+      1381,
+      4
+    ]
+  },
+  "816": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      816,
+      812,
+      1381,
+      4
+    ]
+  },
+  "817": {
+    "nameEn": "Carriers",
+    "nameZh": "航空母舰",
+    "ancestors": [
+      817,
+      1381,
+      4
+    ]
+  },
+  "818": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      818,
+      817,
+      1381,
+      4
+    ]
+  },
+  "819": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      819,
+      817,
+      1381,
+      4
+    ]
+  },
+  "820": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      820,
+      817,
+      1381,
+      4
+    ]
+  },
+  "821": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      821,
+      817,
+      1381,
+      4
+    ]
+  },
+  "822": {
+    "nameEn": "Command Ships",
+    "nameZh": "指挥舰",
+    "ancestors": [
+      822,
+      1375,
+      1374,
+      4
+    ]
+  },
+  "823": {
+    "nameEn": "Interdictors",
+    "nameZh": "拦截舰",
+    "ancestors": [
+      823,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "824": {
+    "nameEn": "Recon Ships",
+    "nameZh": "侦察舰",
+    "ancestors": [
+      824,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "825": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      825,
+      822,
+      1375,
+      1374,
+      4
+    ]
+  },
+  "826": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      826,
+      823,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "827": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      827,
+      824,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "828": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      828,
+      822,
+      1375,
+      1374,
+      4
+    ]
+  },
+  "829": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      829,
+      823,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "830": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      830,
+      824,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "831": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      831,
+      822,
+      1375,
+      1374,
+      4
+    ]
+  },
+  "832": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      832,
+      823,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "833": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      833,
+      824,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "834": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      834,
+      822,
+      1375,
+      1374,
+      4
+    ]
+  },
+  "835": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      835,
+      823,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "836": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      836,
+      824,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "874": {
+    "nameEn": "Exhumers",
+    "nameZh": "采掘者",
+    "ancestors": [
+      874,
+      1384,
+      4
+    ]
+  },
+  "1047": {
+    "nameEn": "Capital Industrial Ships",
+    "nameZh": "旗舰级工业舰",
+    "ancestors": [
+      1047,
+      1381,
+      4
+    ]
+  },
+  "1048": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      1048,
+      1047,
+      1381,
+      4
+    ]
+  },
+  "1065": {
+    "nameEn": "Electronic Attack Frigates",
+    "nameZh": "电子攻击护卫舰",
+    "ancestors": [
+      1065,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1066": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1066,
+      1065,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1067": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1067,
+      1065,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1068": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1068,
+      1065,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1069": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1069,
+      1065,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1070": {
+    "nameEn": "Heavy Interdiction Cruisers",
+    "nameZh": "重型拦截巡洋舰",
+    "ancestors": [
+      1070,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1071": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1071,
+      1070,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1072": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1072,
+      1070,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1073": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1073,
+      1070,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1074": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1074,
+      1070,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1075": {
+    "nameEn": "Black Ops",
+    "nameZh": "黑隐特勤舰",
+    "ancestors": [
+      1075,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1076": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1076,
+      1075,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1077": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1077,
+      1075,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1078": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1078,
+      1075,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1079": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1079,
+      1075,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1080": {
+    "nameEn": "Marauders",
+    "nameZh": "掠夺舰",
+    "ancestors": [
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1081": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1081,
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1082": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1082,
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1083": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1083,
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1084": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1084,
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1089": {
+    "nameEn": "Jump Freighters",
+    "nameZh": "战略货舰",
+    "ancestors": [
+      1089,
+      1381,
+      4
+    ]
+  },
+  "1090": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1090,
+      1089,
+      1381,
+      4
+    ]
+  },
+  "1091": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1091,
+      1089,
+      1381,
+      4
+    ]
+  },
+  "1092": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1092,
+      1089,
+      1381,
+      4
+    ]
+  },
+  "1093": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1093,
+      1089,
+      1381,
+      4
+    ]
+  },
+  "1138": {
+    "nameEn": "Strategic Cruisers",
+    "nameZh": "战略巡洋舰",
+    "ancestors": [
+      1138,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1139": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1139,
+      1138,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1140": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1140,
+      1138,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1141": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1141,
+      1138,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1142": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1142,
+      1138,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1361": {
+    "nameEn": "Frigates",
+    "nameZh": "护卫舰",
+    "ancestors": [
+      1361,
+      4
+    ]
+  },
+  "1362": {
+    "nameEn": "Faction Frigates",
+    "nameZh": "势力护卫舰",
+    "ancestors": [
+      1362,
+      1361,
+      4
+    ]
+  },
+  "1364": {
+    "nameEn": "Advanced Frigates",
+    "nameZh": "高级护卫舰",
+    "ancestors": [
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1365": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      1365,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "1366": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "1367": {
+    "nameEn": "Cruisers",
+    "nameZh": "巡洋舰",
+    "ancestors": [
+      1367,
+      4
+    ]
+  },
+  "1368": {
+    "nameEn": "Advanced Cruisers",
+    "nameZh": "高级巡洋舰",
+    "ancestors": [
+      1368,
+      1367,
+      4
+    ]
+  },
+  "1369": {
+    "nameEn": "Faction Cruisers",
+    "nameZh": "势力巡洋舰",
+    "ancestors": [
+      1369,
+      1367,
+      4
+    ]
+  },
+  "1370": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      1370,
+      1369,
+      1367,
+      4
+    ]
+  },
+  "1371": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      1371,
+      1369,
+      1367,
+      4
+    ]
+  },
+  "1372": {
+    "nameEn": "Destroyers",
+    "nameZh": "驱逐舰",
+    "ancestors": [
+      1372,
+      4
+    ]
+  },
+  "1373": {
+    "nameEn": "Advanced Destroyers",
+    "nameZh": "高级驱逐舰",
+    "ancestors": [
+      1373,
+      1372,
+      4
+    ]
+  },
+  "1374": {
+    "nameEn": "Battlecruisers",
+    "nameZh": "战列巡洋舰",
+    "ancestors": [
+      1374,
+      4
+    ]
+  },
+  "1375": {
+    "nameEn": "Advanced Battlecruisers",
+    "nameZh": "高级战列巡洋舰",
+    "ancestors": [
+      1375,
+      1374,
+      4
+    ]
+  },
+  "1376": {
+    "nameEn": "Battleships",
+    "nameZh": "战列舰",
+    "ancestors": [
+      1376,
+      4
+    ]
+  },
+  "1377": {
+    "nameEn": "Advanced Battleships",
+    "nameZh": "高级战列舰",
+    "ancestors": [
+      1377,
+      1376,
+      4
+    ]
+  },
+  "1378": {
+    "nameEn": "Faction Battleships",
+    "nameZh": "势力战列舰",
+    "ancestors": [
+      1378,
+      1376,
+      4
+    ]
+  },
+  "1379": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      1379,
+      1378,
+      1376,
+      4
+    ]
+  },
+  "1380": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      1380,
+      1378,
+      1376,
+      4
+    ]
+  },
+  "1381": {
+    "nameEn": "Capital Ships",
+    "nameZh": "旗舰",
+    "ancestors": [
+      1381,
+      4
+    ]
+  },
+  "1382": {
+    "nameEn": "Haulers and Industrial Ships",
+    "nameZh": "运载舰和工业舰",
+    "ancestors": [
+      1382,
+      4
+    ]
+  },
+  "1384": {
+    "nameEn": "Mining Barges",
+    "nameZh": "采矿驳船",
+    "ancestors": [
+      1384,
+      4
+    ]
+  },
+  "1385": {
+    "nameEn": "Advanced Haulers",
+    "nameZh": "高级运载舰",
+    "ancestors": [
+      1385,
+      1382,
+      4
+    ]
+  },
+  "1390": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      1390,
+      8,
+      1382,
+      4
+    ]
+  },
+  "1392": {
+    "nameEn": "Faction Carrier",
+    "nameZh": "势力航母",
+    "ancestors": [
+      1392,
+      817,
+      1381,
+      4
+    ]
+  },
+  "1612": {
+    "nameEn": "Special Edition Ships",
+    "nameZh": "特别版舰船",
+    "ancestors": [
+      1612,
+      4
+    ]
+  },
+  "1614": {
+    "nameEn": "Special Edition Industrial Ships",
+    "nameZh": "特别版工业舰",
+    "ancestors": [
+      1614,
+      1612,
+      4
+    ]
+  },
+  "1616": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      1616,
+      5,
+      1361,
+      4
+    ]
+  },
+  "1618": {
+    "nameEn": "Special Edition Shuttles",
+    "nameZh": "特别版穿梭机",
+    "ancestors": [
+      1618,
+      1612,
+      4
+    ]
+  },
+  "1619": {
+    "nameEn": "Special Edition Frigates",
+    "nameZh": "特别版护卫舰",
+    "ancestors": [
+      1619,
+      1612,
+      4
+    ]
+  },
+  "1620": {
+    "nameEn": "Special Edition Battleships",
+    "nameZh": "特别版战列舰",
+    "ancestors": [
+      1620,
+      1612,
+      4
+    ]
+  },
+  "1621": {
+    "nameEn": "Special Edition Heavy Assault Cruisers",
+    "nameZh": "特别版重型突击巡洋舰",
+    "ancestors": [
+      1621,
+      1612,
+      4
+    ]
+  },
+  "1623": {
+    "nameEn": "Special Edition Assault Frigates",
+    "nameZh": "特别版突击护卫舰",
+    "ancestors": [
+      1623,
+      1612,
+      4
+    ]
+  },
+  "1624": {
+    "nameEn": "Special Edition Logistics",
+    "nameZh": "特别版后勤舰",
+    "ancestors": [
+      1624,
+      1612,
+      4
+    ]
+  },
+  "1631": {
+    "nameEn": "Faction Shuttles",
+    "nameZh": "势力穿梭机",
+    "ancestors": [
+      1631,
+      391,
+      4
+    ]
+  },
+  "1698": {
+    "nameEn": "Special Edition Battlecruisers",
+    "nameZh": "特别版战列巡洋舰",
+    "ancestors": [
+      1698,
+      1612,
+      4
+    ]
+  },
+  "1699": {
+    "nameEn": "Special Edition Cruisers",
+    "nameZh": "特别版巡洋舰",
+    "ancestors": [
+      1699,
+      1612,
+      4
+    ]
+  },
+  "1703": {
+    "nameEn": "Faction Battlecruisers",
+    "nameZh": "势力战列巡洋舰",
+    "ancestors": [
+      1703,
+      1374,
+      4
+    ]
+  },
+  "1704": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      1704,
+      1703,
+      1374,
+      4
+    ]
+  },
+  "1815": {
+    "nameEn": "Corvettes",
+    "nameZh": "轻型护卫舰",
+    "ancestors": [
+      1815,
+      4
+    ]
+  },
+  "1816": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1816,
+      1815,
+      4
+    ]
+  },
+  "1817": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      1817,
+      1815,
+      4
+    ]
+  },
+  "1818": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      1818,
+      1815,
+      4
+    ]
+  },
+  "1819": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1819,
+      1815,
+      4
+    ]
+  },
+  "1837": {
+    "nameEn": "Special Edition Recon Ships",
+    "nameZh": "特别版侦察舰",
+    "ancestors": [
+      1837,
+      1612,
+      4
+    ]
+  },
+  "1838": {
+    "nameEn": "Special Edition Covert Ops",
+    "nameZh": "特别版隐形特勤舰",
+    "ancestors": [
+      1838,
+      1612,
+      4
+    ]
+  },
+  "1924": {
+    "nameEn": "Expedition Frigates",
+    "nameZh": "勘探护卫舰",
+    "ancestors": [
+      1924,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "1932": {
+    "nameEn": "Special Edition Interceptors",
+    "nameZh": "特别版截击舰",
+    "ancestors": [
+      1932,
+      1612,
+      4
+    ]
+  },
+  "1950": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      1950,
+      766,
+      1381,
+      4
+    ]
+  },
+  "1951": {
+    "nameEn": "Tactical Destroyers",
+    "nameZh": "战术驱逐舰",
+    "ancestors": [
+      1951,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "1952": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      1952,
+      1951,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "1953": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      1953,
+      1951,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2021": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      2021,
+      1951,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2034": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      2034,
+      1951,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2115": {
+    "nameEn": "Special Edition Heavy Interdiction Cruisers",
+    "nameZh": "特别版重型拦截巡洋舰",
+    "ancestors": [
+      2115,
+      1612,
+      4
+    ]
+  },
+  "2125": {
+    "nameEn": "Command Destroyers",
+    "nameZh": "指挥驱逐舰",
+    "ancestors": [
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2126": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      2126,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2131": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      2131,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2132": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      2132,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2133": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      2133,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2146": {
+    "nameEn": "Logistics Frigates",
+    "nameZh": "后勤护卫舰",
+    "ancestors": [
+      2146,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2147": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      2147,
+      2146,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2148": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      2148,
+      2146,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2149": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      2149,
+      2146,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2150": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      2150,
+      2146,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2271": {
+    "nameEn": "Force Auxiliaries",
+    "nameZh": "战力辅助舰",
+    "ancestors": [
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2272": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      2272,
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2273": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      2273,
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2274": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      2274,
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2275": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      2275,
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2287": {
+    "nameEn": "Faction Titans",
+    "nameZh": "势力泰坦",
+    "ancestors": [
+      2287,
+      812,
+      1381,
+      4
+    ]
+  },
+  "2288": {
+    "nameEn": "Faction Dreadnoughts",
+    "nameZh": "势力无畏舰",
+    "ancestors": [
+      2288,
+      761,
+      1381,
+      4
+    ]
+  },
+  "2335": {
+    "nameEn": "Industrial Command Ships",
+    "nameZh": "工业指挥舰",
+    "ancestors": [
+      2335,
+      1382,
+      4
+    ]
+  },
+  "2336": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      2336,
+      2335,
+      1382,
+      4
+    ]
+  },
+  "2350": {
+    "nameEn": "Special Edition Destroyers",
+    "nameZh": "特别版驱逐舰",
+    "ancestors": [
+      2350,
+      1612,
+      4
+    ]
+  },
+  "2357": {
+    "nameEn": "Faction Force Auxiliaries",
+    "nameZh": "势力战力辅助舰",
+    "ancestors": [
+      2357,
+      2271,
+      1381,
+      4
+    ]
+  },
+  "2416": {
+    "nameEn": "Flag Cruisers",
+    "nameZh": "战地巡洋舰",
+    "ancestors": [
+      2416,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "2417": {
+    "nameEn": "CONCORD",
+    "nameZh": "统一合作关系部",
+    "ancestors": [
+      2417,
+      2416,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "2425": {
+    "nameEn": "Precursor Frigates",
+    "nameZh": "先驱者护卫舰",
+    "ancestors": [
+      2425,
+      1361,
+      4
+    ]
+  },
+  "2426": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2426,
+      2425,
+      1361,
+      4
+    ]
+  },
+  "2427": {
+    "nameEn": "Precursor Cruisers",
+    "nameZh": "先驱者巡洋舰",
+    "ancestors": [
+      2427,
+      1367,
+      4
+    ]
+  },
+  "2428": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2428,
+      2427,
+      1367,
+      4
+    ]
+  },
+  "2429": {
+    "nameEn": "Precursor Battleships",
+    "nameZh": "先驱者战列舰",
+    "ancestors": [
+      2429,
+      1376,
+      4
+    ]
+  },
+  "2430": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2430,
+      2429,
+      1376,
+      4
+    ]
+  },
+  "2522": {
+    "nameEn": "Precursor Destroyers",
+    "nameZh": "先驱者驱逐舰",
+    "ancestors": [
+      2522,
+      1372,
+      4
+    ]
+  },
+  "2523": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2523,
+      2522,
+      1372,
+      4
+    ]
+  },
+  "2524": {
+    "nameEn": "Precursor Battlecruisers",
+    "nameZh": "先驱者战列巡洋舰",
+    "ancestors": [
+      2524,
+      1374,
+      4
+    ]
+  },
+  "2525": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2525,
+      2524,
+      1374,
+      4
+    ]
+  },
+  "2526": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2526,
+      437,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "2535": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2535,
+      448,
+      1368,
+      1367,
+      4
+    ]
+  },
+  "2536": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2536,
+      432,
+      1364,
+      1361,
+      4
+    ]
+  },
+  "2537": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2537,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "2690": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      2690,
+      3508,
+      761,
+      1381,
+      4
+    ]
+  },
+  "2702": {
+    "nameEn": "Special Edition Corvettes",
+    "nameZh": "特别版轻型护卫舰",
+    "ancestors": [
+      2702,
+      1612,
+      4
+    ]
+  },
+  "2819": {
+    "nameEn": "Special Edition Electronic Attack Frigates",
+    "nameZh": "特别版电子攻击护卫舰",
+    "ancestors": [
+      2819,
+      1612,
+      4
+    ]
+  },
+  "3480": {
+    "nameEn": "Faction Destroyers",
+    "nameZh": "势力驱逐舰",
+    "ancestors": [
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3481": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3483": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      3483,
+      2288,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3484": {
+    "nameEn": "Navy Faction",
+    "nameZh": "海军势力",
+    "ancestors": [
+      3484,
+      2288,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3508": {
+    "nameEn": "Precursor Dreadnoughts",
+    "nameZh": "先驱者无畏舰",
+    "ancestors": [
+      3508,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3509": {
+    "nameEn": "Standard Dreadnoughts",
+    "nameZh": "标准无畏舰",
+    "ancestors": [
+      3509,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3510": {
+    "nameEn": "Advanced Dreadnoughts",
+    "nameZh": "高级无畏舰",
+    "ancestors": [
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3511": {
+    "nameEn": "Lancer Dreadnoughts",
+    "nameZh": "枪骑兵级无畏舰",
+    "ancestors": [
+      3511,
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3512": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      3512,
+      3511,
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3513": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      3513,
+      3511,
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3514": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      3514,
+      3511,
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3515": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      3515,
+      3511,
+      3510,
+      761,
+      1381,
+      4
+    ]
+  },
+  "3531": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      3531,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3534": {
+    "nameEn": "Pirate Faction",
+    "nameZh": "海盗势力",
+    "ancestors": [
+      3534,
+      1703,
+      1374,
+      4
+    ]
+  },
+  "3536": {
+    "nameEn": "EDENCOM",
+    "nameZh": "伊甸联合防御阵线",
+    "ancestors": [
+      3536,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "3537": {
+    "nameEn": "EDENCOM",
+    "nameZh": "伊甸联合防御阵线",
+    "ancestors": [
+      3537,
+      1369,
+      1367,
+      4
+    ]
+  },
+  "3538": {
+    "nameEn": "EDENCOM",
+    "nameZh": "伊甸联合防御阵线",
+    "ancestors": [
+      3538,
+      1378,
+      1376,
+      4
+    ]
+  },
+  "3577": {
+    "nameEn": "Upwell",
+    "nameZh": "昇威",
+    "ancestors": [
+      3577,
+      8,
+      1382,
+      4
+    ]
+  },
+  "3578": {
+    "nameEn": "Upwell",
+    "nameZh": "昇威",
+    "ancestors": [
+      3578,
+      629,
+      1385,
+      1382,
+      4
+    ]
+  },
+  "3580": {
+    "nameEn": "Upwell",
+    "nameZh": "昇威",
+    "ancestors": [
+      3580,
+      766,
+      1381,
+      4
+    ]
+  },
+  "3744": {
+    "nameEn": "Triglavian",
+    "nameZh": "三神裔",
+    "ancestors": [
+      3744,
+      1080,
+      1377,
+      1376,
+      4
+    ]
+  },
+  "3755": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      3755,
+      464,
+      1372,
+      4
+    ]
+  },
+  "3759": {
+    "nameEn": "Expedition Command Ships",
+    "nameZh": "远征指挥舰",
+    "ancestors": [
+      3759,
+      1374,
+      4
+    ]
+  },
+  "3762": {
+    "nameEn": "Sisters of EVE",
+    "nameZh": "EVE姐妹会",
+    "ancestors": [
+      3762,
+      3759,
+      1374,
+      4
+    ]
+  },
+  "3764": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      3764,
+      2125,
+      1373,
+      1372,
+      4
+    ]
+  },
+  "3765": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      3765,
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3766": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      3766,
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3767": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      3767,
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3768": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      3768,
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3769": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      3769,
+      3481,
+      3480,
+      1372,
+      4
+    ]
+  },
+  "3770": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      3770,
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "3771": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      3771,
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "3772": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      3772,
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "3773": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      3773,
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  },
+  "3774": {
+    "nameEn": "ORE",
+    "nameZh": "联合矿业",
+    "ancestors": [
+      3774,
+      1366,
+      1362,
+      1361,
+      4
+    ]
+  }
+}

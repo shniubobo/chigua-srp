@@ -1,0 +1,14 @@
+diff --git a/dist/client.js b/dist/client.js
+index 3ec27cd04afd54a1c44754867eb4458d20ffe6e1..76c4a95895dc30c5d13482cf000980b29aa2d17e 100644
+--- a/dist/client.js
++++ b/dist/client.js
+@@ -8,9 +8,6 @@ export class EsiClient {
+         if (options.userAgent?.length) {
+             this.userAgent += ` ${options.userAgent}`;
+         }
+-        else {
+-            throw new Error('@localisprimary/esi: No user agent provided to constructor');
+-        }
+     }
+     async request(method, path, params, body) {
+         const url = new URL(path, this.baseUrl);

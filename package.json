@@ -1,0 +1,50 @@
+{
+  "name": "chigua-srp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dist": "VITE_REVISION=$(git rev-parse --verify HEAD) vite build",
+    "preview": "vite preview",
+    "lint": "editorconfig-checker && eslint && prettier --check . && pnpm type-check",
+    "type-check": "vue-tsc --build"
+  },
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
+  "dependencies": {
+    "@localisprimary/esi": "^2.0.14",
+    "@vueuse/integrations": "^14.2.1",
+    "jose": "^6.2.2",
+    "openid-client": "^6.8.3",
+    "tailwindcss": "^4.2.4",
+    "universal-cookie": "^8.1.0",
+    "vue": "^3.5.32",
+    "vxe-pc-ui": "^4.13.26",
+    "vxe-table": "^4.18.13",
+    "xe-utils": "^4.0.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.2.4",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.12.2",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "~10.8.0",
+    "globals": "^17.5.0",
+    "prettier": "3.8.1",
+    "prettier-plugin-classnames": "^0.10.1",
+    "prettier-plugin-merge": "^0.10.1",
+    "prettier-plugin-tailwindcss": "^0.7.3",
+    "sass-embedded": "^1.99.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.8",
+    "vite-bundle-analyzer": "^1.3.8",
+    "vite-plugin-lazy-import": "^1.0.7",
+    "vite-plugin-vue-devtools": "^8.1.1",
+    "vue-tsc": "^3.2.6"
+  }
+}

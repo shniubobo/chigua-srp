@@ -1,0 +1,4 @@
+allowBuilds:
+  "@parcel/watcher": true
+patchedDependencies:
+  "@localisprimary/esi": patches/@localisprimary__esi.patch
