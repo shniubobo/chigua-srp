@@ -1,3 +1,5 @@
+packages:
+  - "chigua-srp"
 allowBuilds:
   "@parcel/watcher": true
 patchedDependencies:

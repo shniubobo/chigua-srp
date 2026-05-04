@@ -130,10 +130,7 @@ watch(
     const srpDataWithReview = Array.from(
       props.srpData
         .entries()
-        .map(
-          ([id, entry]) =>
-            ({ ...entry, ...props.reviews.get(id)! }) as SrpDataWithReview,
-        ),
+        .map(([id, entry]) => ({ ...entry, ...props.reviews.get(id)! })),
     );
 
     const byPayee = Object.groupBy(

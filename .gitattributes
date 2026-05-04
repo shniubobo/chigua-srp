@@ -1,1 +1,3 @@
-/src/sde/*.json linguist-generated
+/chigua-srp/src/sde/*.json linguist-generated
+/chigua-srp/src/sde/raw/*.ts linguist-generated
+/chigua-srp/src/sde/raw/transform.ts -linguist-generated
