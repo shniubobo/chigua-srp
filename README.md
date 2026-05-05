@@ -13,7 +13,9 @@
 
 ## 开发
 
-准备开发环境：
+### 准备开发环境
+
+安装依赖：
 
 ```
 nvm use
@@ -21,13 +23,22 @@ corepack enable
 pnpm i
 ```
 
-启动开发服务器：
+本地开发环境需要自行[前往 ESI 创建一个 App](https://developers.eveonline.com/applications/create)。名称和介绍不重要，任意内容均可；Callback URL 填写 `http://localhost:5173`，scope 按照 [esi.ts](chigua-srp/src/esi.ts) 内的 `SCOPES` 勾选。创建完成后，页面会显示一个 Client ID。在[chigua-srp](./chigua-srp/)目录下创建如下 `.env.development` 文件，并将 `<cliend id>` 替换为刚刚申请得到的即可。
+
+```dotenv
+VITE_CLIENT_ID="<client id>"
+VITE_REDIRECT_URI="http://localhost:5173"
+```
+
+如此操作后，每次使用 vite 启动开发服务器时，vite 会自动读取这两个环境变量，并传给应用。
+
+### 启动开发服务器
 
 ```
 pnpm dev
 ```
 
-构建：
+### 构建
 
 ```
 pnpm lint
