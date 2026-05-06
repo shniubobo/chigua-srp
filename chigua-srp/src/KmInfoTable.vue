@@ -313,7 +313,6 @@ async function onManualReject(row: Row) {
           return `${cellValue * 100}%`;
         }
       "
-      sortable
     ></VxeColumn>
 
     <VxeColumn
