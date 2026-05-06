@@ -50,6 +50,8 @@ interface KillmailPointer {
 interface KillmailReport {
   issuerId?: number;
   date?: Date;
+  subject?: string;
+  bodyPlainText?: string;
 }
 
 export interface Character {
@@ -294,6 +296,11 @@ async function fetchMailBody(
   return mailContent;
 }
 
+function stripHtml(html: string | undefined): string {
+  if (html === undefined) return "";
+  return html.replace(/<[^>]*>/g, "");
+}
+
 function parseMail(mail: GetCharacterMailMailIdResponse): KillmailPointer[] {
   // Example:
   // <a href="killReport:134742722:400cbc5598ab0fe7f8930aabf680b8e748bef818">
@@ -304,6 +311,8 @@ function parseMail(mail: GetCharacterMailMailIdResponse): KillmailPointer[] {
     report: {
       issuerId: mail.from,
       date: mail.timestamp ? new Date(mail.timestamp) : undefined,
+      subject: mail.subject,
+      bodyPlainText: stripHtml(mail.body),
     },
   }));
 

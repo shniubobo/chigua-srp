@@ -15,6 +15,8 @@ interface Row {
   issuerName: string;
   killTime: Date;
   reportTime?: Date;
+  mailSubject?: string;
+  mailBody?: string;
   tags: Tags;
   shipName: ShipName;
   shipPrice: number | null;
@@ -55,6 +57,8 @@ const rows = computed<Row[]>(() =>
         issuerName: context.issuerName,
         killTime: new Date(killmail.killmail.killmail_time),
         reportTime: killmail.pointer.report.date,
+        mailSubject: killmail.pointer.report.subject,
+        mailBody: killmail.pointer.report.bodyPlainText,
         tags: {
           victimIsChiGua: context.victimIsChiGua,
           issuerIsChiGuaFc: context.issuerIsChiGuaFc,
@@ -231,6 +235,20 @@ async function onManualReject(row: Row) {
       title="邮件时间"
       width="auto"
       :formatter="({ cellValue }) => formatDateEt(cellValue)"
+    ></VxeColumn>
+
+    <VxeColumn
+      field="mailSubject"
+      title="邮件标题"
+      width="auto"
+      show-overflow="tooltip"
+    ></VxeColumn>
+
+    <VxeColumn
+      field="mailBody"
+      title="邮件正文"
+      width="350"
+      show-overflow="tooltip"
     ></VxeColumn>
 
     <VxeColumn
