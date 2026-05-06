@@ -196,15 +196,12 @@ async function onManualReject(row: Row) {
     :aggregate-config="aggregateConfig"
     @data-rendered="onDataRendered()"
   >
-    <VxeColumn
-      field="srpPayee"
-      title="收款人"
-      width="150"
-      fixed="left"
-      row-group-node
-    >
+    <VxeColumn field="srpPayee" title="收款人" width="150" row-group-node>
       <template #groupContent="{ groupContent }">
-        {{ groupContent }}
+        <span class="flex">
+          <span class="grow">{{ groupContent }}</span>
+          <span>{{ groupContent }}</span>
+        </span>
       </template>
       <template #default></template>
     </VxeColumn>
