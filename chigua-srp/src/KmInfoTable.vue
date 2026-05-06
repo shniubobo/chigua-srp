@@ -15,6 +15,8 @@ interface Row {
   issuerName: string;
   killTime: Date;
   reportTime?: Date;
+  mailSubject?: string;
+  mailBody?: string;
   tags: Tags;
   shipName: ShipName;
   shipPrice: number | null;
@@ -55,6 +57,8 @@ const rows = computed<Row[]>(() =>
         issuerName: context.issuerName,
         killTime: new Date(killmail.killmail.killmail_time),
         reportTime: killmail.pointer.report.date,
+        mailSubject: killmail.pointer.report.subject,
+        mailBody: killmail.pointer.report.bodyPlainText,
         tags: {
           victimIsChiGua: context.victimIsChiGua,
           issuerIsChiGuaFc: context.issuerIsChiGuaFc,
@@ -210,6 +214,7 @@ async function onManualReject(row: Row) {
       title="损船人"
       width="150"
       show-overflow="tooltip"
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -217,6 +222,7 @@ async function onManualReject(row: Row) {
       title="报损人"
       width="150"
       show-overflow="tooltip"
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -224,6 +230,7 @@ async function onManualReject(row: Row) {
       title="KM 时间"
       width="auto"
       :formatter="({ cellValue }) => formatDateEt(cellValue)"
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -231,6 +238,23 @@ async function onManualReject(row: Row) {
       title="邮件时间"
       width="auto"
       :formatter="({ cellValue }) => formatDateEt(cellValue)"
+      sortable
+    ></VxeColumn>
+
+    <VxeColumn
+      field="mailSubject"
+      title="邮件标题"
+      width="250"
+      show-overflow="tooltip"
+      sortable
+    ></VxeColumn>
+
+    <VxeColumn
+      field="mailBody"
+      title="邮件正文"
+      width="350"
+      show-overflow="tooltip"
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -239,6 +263,7 @@ async function onManualReject(row: Row) {
       show-overflow="tooltip"
       width="250"
       :formatter="({ cellValue: { en, zh } }) => (en ? `${en} ${zh}` : '未知')"
+      sortable
     ></VxeColumn>
 
     <VxeColumn title="标签" min-width="auto">
@@ -275,6 +300,7 @@ async function onManualReject(row: Row) {
         name: 'FormatNumberInput',
         props: { type: 'amount', align: 'right', digits: 0 },
       }"
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -290,6 +316,7 @@ async function onManualReject(row: Row) {
           return `${cellValue * 100}%`;
         }
       "
+      sortable
     ></VxeColumn>
 
     <VxeColumn
@@ -300,6 +327,7 @@ async function onManualReject(row: Row) {
       header-align="right"
       fixed="right"
       agg-func
+      sortable
     >
       <template #default="{ row }">{{ formatSrpPrice(row) }}</template>
       <template #group-values="{ aggValue }">{{ `${aggValue}m` }}</template>
