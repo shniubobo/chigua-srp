@@ -300,7 +300,6 @@ async function onManualReject(row: Row) {
         name: 'FormatNumberInput',
         props: { type: 'amount', align: 'right', digits: 0 },
       }"
-      sortable
     ></VxeColumn>
 
     <VxeColumn
