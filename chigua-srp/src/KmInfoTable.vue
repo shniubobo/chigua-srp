@@ -246,7 +246,6 @@ async function onManualReject(row: Row) {
       title="邮件标题"
       width="auto"
       show-overflow="tooltip"
-      sortable
     ></VxeColumn>
 
     <VxeColumn
