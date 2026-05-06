@@ -35,7 +35,7 @@ interface Tags {
 
 interface ShipName {
   en: string;
-  zh?: string;
+  zh: string;
 }
 
 const props = defineProps<{
@@ -58,6 +58,7 @@ const rows = computed<Row[]>(() =>
         tags: {
           victimIsChiGua: context.victimIsChiGua,
           issuerIsChiGuaFc: context.issuerIsChiGuaFc,
+          isShip: context.isShip,
           isNpcKill: context.isNpcKill,
           isDrifterKill: context.isDrifterKill,
           isInAutoSrp: context.isInAutoSrp,
@@ -237,7 +238,7 @@ async function onManualReject(row: Row) {
       title="船体"
       show-overflow="tooltip"
       width="250"
-      :formatter="({ cellValue: { en, zh } }) => `${en} ${zh}`"
+      :formatter="({ cellValue: { en, zh } }) => (en ? `${en} ${zh}` : '未知')"
     ></VxeColumn>
 
     <VxeColumn title="标签" min-width="auto">
@@ -248,6 +249,7 @@ async function onManualReject(row: Row) {
           status="error"
           >非 FC 转发</VxeTag
         >
+        <VxeTag v-if="!row.tags.isShip" status="error">非船损</VxeTag>
         <VxeTag v-if="row.tags.isNpcKill" status="error">怪损</VxeTag>
         <VxeTag v-if="row.tags.isDrifterKill" status="info">流浪爹损</VxeTag>
         <VxeTag

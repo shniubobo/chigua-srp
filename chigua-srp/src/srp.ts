@@ -99,12 +99,13 @@ export class DecisionContext {
     public readonly victimIsChiGua: boolean,
     public readonly issuerName: string,
     public readonly issuerIsChiGuaFc: boolean,
+    public readonly isShip: boolean,
     public readonly isNpcKill: boolean,
     public readonly isDrifterKill: boolean,
     public readonly isInAutoSrp: boolean,
     public readonly shipNameEn: string,
     // public readonly shipGroupNameEn: string,
-    public readonly shipNameZh?: string,
+    public readonly shipNameZh: string,
     // public readonly shipGroupNameZh?: string,
   ) {}
 
@@ -128,6 +129,7 @@ export class DecisionContext {
       issuerIsChiGuaFc = isChiGuaFc(issuer);
     }
 
+    const isShip_ = isShip(killmail);
     const isNpcKill_ = isNpcKill(killmail);
     const isDrifterKill_ = isDrifterKill(killmail);
     const isInAutoSrp_ = isInAutoSrp(killmail);
@@ -135,9 +137,10 @@ export class DecisionContext {
     const shipTypeId = killmail.killmail.victim.ship_type_id;
     const shipNames = getShipNames(shipTypeId);
     let shipNameEn = "";
-    let shipNameZh = undefined;
+    let shipNameZh = "";
     if (shipNames) {
-      ({ en: shipNameEn, zh: shipNameZh } = shipNames);
+      shipNameEn = shipNames.en;
+      if (shipNames.zh) shipNameZh = shipNames.zh;
     }
 
     return new this(
@@ -145,6 +148,7 @@ export class DecisionContext {
       victimIsChiGua,
       issuerName,
       issuerIsChiGuaFc,
+      isShip_,
       isNpcKill_,
       isDrifterKill_,
       isInAutoSrp_,
@@ -298,6 +302,10 @@ async function makeDecision(
   const esi = await buildEsiContext(accessToken);
   const context = await DecisionContext.fetch(esi, killmail);
 
+  if (!context.isShip) {
+    return [new Decision<Reject>(null, null), context];
+  }
+
   if (context.victimIsChiGua) {
     if (context.isNpcKill && !context.isDrifterKill)
       return [new Decision<Reject>(null, null), context];
@@ -338,6 +346,11 @@ async function makeDecision(
     ),
     context,
   ];
+}
+
+function isShip(killmail: Killmail): boolean {
+  const victimTypeId = killmail.killmail.victim.ship_type_id;
+  return isTypeInMarketGroups(victimTypeId, [SHIPS]);
 }
 
 function isChiGua(character: Character): boolean {
