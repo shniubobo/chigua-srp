@@ -1,28 +1,24 @@
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import eslintPluginVue from "eslint-plugin-vue";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
-import { globalIgnores } from "eslint/config";
 
 export default typescriptEslint.config(
-  globalIgnores(["**/*.js"]),
   { ignores: ["*.d.ts", "**/dist"] },
   {
     extends: [
       eslint.configs.recommended,
       ...typescriptEslint.configs.recommendedTypeChecked,
-      ...eslintPluginVue.configs["flat/recommended"],
     ],
-    files: ["**/*.{ts,vue}"],
+    files: ["**/*.ts"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: globals.browser,
+      globals: globals.node,
       parserOptions: {
         parser: typescriptEslint.parser,
         projectService: true,
-        extraFileExtensions: [".vue"],
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
