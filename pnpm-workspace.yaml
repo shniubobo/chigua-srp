@@ -5,8 +5,10 @@ allowBuilds:
   "@parcel/watcher": true
 catalog:
   "@cloudflare/vite-plugin": ^1.36.3
+  '@cloudflare/vitest-pool-workers': ^0.16.3
   "@eslint/js": ^10.0.1
   "@types/node": ^24.12.2
+  '@vitest/eslint-plugin': ^1.6.17
   eslint: ^10.2.0
   eslint-config-prettier: ^10.1.8
   globals: ^17.5.0
@@ -14,6 +16,7 @@ catalog:
   typescript: ~6.0.2
   typescript-eslint: ^8.59.1
   vite: ^8.0.8
+  vitest: ^4.1.6
   wrangler: ^4.90.0
   zod: ^4.4.3
 catalogMode: strict

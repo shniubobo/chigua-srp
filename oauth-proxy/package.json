@@ -6,6 +6,7 @@
   "scripts": {
     "bootstrap": "wrangler types",
     "dev": "vite",
+    "test": "vitest run",
     "dist": "vite build",
     "lint": "prettier --check . && eslint && pnpm type-check",
     "type-check": "tsc --build"
@@ -16,8 +17,10 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "catalog:",
+    "@cloudflare/vitest-pool-workers": "catalog:",
     "@eslint/js": "catalog:",
     "@types/node": "catalog:",
+    "@vitest/eslint-plugin": "catalog:",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "globals": "catalog:",
@@ -25,6 +28,7 @@
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
+    "vitest": "catalog:",
     "wrangler": "catalog:"
   }
 }

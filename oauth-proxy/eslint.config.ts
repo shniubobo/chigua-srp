@@ -1,4 +1,5 @@
 import eslint from "@eslint/js";
+import vitest from "@vitest/eslint-plugin";
 import eslintConfigPrettier from "eslint-config-prettier";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
@@ -22,6 +23,12 @@ export default typescriptEslint.config(
       },
     },
     rules: {
+      "no-empty-pattern": [
+        "error",
+        {
+          allowObjectPatternsAsParameters: true,
+        },
+      ],
       // https://typescript-eslint.io/rules/no-unused-vars/
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -35,6 +42,30 @@ export default typescriptEslint.config(
           ignoreRestSiblings: true,
         },
       ],
+    },
+  },
+  {
+    extends: [vitest.configs.recommended],
+    files: ["**/*.test.ts"],
+    rules: {
+      "vitest/consistent-each-for": [
+        "error",
+        {
+          describe: "for",
+          it: "for",
+          suite: "for",
+          test: "for",
+        },
+      ],
+      "vitest/consistent-test-filename": "error",
+      "vitest/consistent-test-it": [
+        "error",
+        {
+          fn: "it",
+          withinDescribe: "it",
+        },
+      ],
+      "vitest/consistent-vitest-vi": "error",
     },
   },
   eslintConfigPrettier,

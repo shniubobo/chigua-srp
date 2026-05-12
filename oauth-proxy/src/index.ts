@@ -1,16 +1,18 @@
 import * as z from "zod";
 
-const URL_BASE = new URL("https://login.eveonline.com/");
-const PATH_CONFIG = "/.well-known/openid-configuration";
-const URL_CONFIG = new URL(PATH_CONFIG, URL_BASE);
+export const URL_BASE = new URL("https://login.eveonline.com/");
+export const PATH_CONFIG = "/.well-known/openid-configuration";
+export const URL_CONFIG = new URL(PATH_CONFIG, URL_BASE);
 
-const OpenIdConfig = z.looseObject({
-  authorization_endpoint: z.httpUrl(),
-  token_endpoint: z.httpUrl(),
+export const OpenIdConfig = z.looseObject({
+  authorization_endpoint: z.url({ protocol: /^https?$/ }),
+  token_endpoint: z.url({ protocol: /^https?$/ }),
 });
 
-const enum HTTP_STATUS {
+export const enum HTTP_STATUS {
+  OK = 200,
   NOT_FOUND = 404,
+  INTERNAL_SERVER_ERROR = 500,
   BAD_GATEWAY = 502,
 }
 
