@@ -21,8 +21,8 @@ export default {
     const currentUrl = new URL(request.url);
     const pathname = currentUrl.pathname.replace(/\/$/, "");
 
-    switch (pathname) {
-      case PATH_CONFIG:
+    switch (`${request.method}:${pathname}`) {
+      case `GET:${PATH_CONFIG}`:
         return handleOpenIdConfig(request);
       default:
         return err(HTTP_STATUS.NOT_FOUND);

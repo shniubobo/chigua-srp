@@ -52,6 +52,11 @@ describe("openid config", () => {
     },
   );
 
+  it("should fallback to 404 on non-GET requests", async () => {
+    const resp = await makeRequest(PATH_CONFIG, "POST");
+    expect(resp.status).toBe(HTTP_STATUS.NOT_FOUND);
+  });
+
   it("should return 502 on faulty upstream", async ({ faultyUpstream: _ }) => {
     const resp = await makeRequest(PATH_CONFIG);
     expect(resp.status).toBe(HTTP_STATUS.BAD_GATEWAY);
