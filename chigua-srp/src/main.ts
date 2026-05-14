@@ -30,10 +30,9 @@ VxeUI.component(VxeTooltip);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App);
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.config.errorHandler = async (err, _instance, info) => {
+app.config.errorHandler = (err, _instance, info) => {
   console.error(`info = ${info}`);
-  await VxeUI.modal.message({
+  void VxeUI.modal.message({
     id: "uncaught-error",
     content: "发生未知错误，请联系开发者！",
     status: "error",

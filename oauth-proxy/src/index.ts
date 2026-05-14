@@ -1,3 +1,4 @@
+import { parseCookie, stringifySetCookie } from "cookie";
 import * as z from "zod";
 
 export const URL_BASE = new URL("https://login.eveonline.com/");
@@ -6,6 +7,9 @@ export const URL_CONFIG = new URL(PATH_CONFIG, URL_BASE);
 export const PATH_AUTH = "/v2/oauth/authorize";
 export const URL_AUTH = new URL(PATH_AUTH, URL_BASE);
 export const PATH_CALLBACK = "/callback";
+
+export const PARAM_REDIRECT_URI = "redirect_uri";
+export const COOKIE_REDIRECT_URI = "redirect-uri";
 
 export const OpenIdConfig = z.looseObject({
   authorization_endpoint: z.url({ protocol: /^https?$/ }),
@@ -31,6 +35,8 @@ export default {
         return handleOpenIdConfig(request);
       case `GET:${PATH_AUTH}`:
         return handleAuth(request);
+      case `GET:${PATH_CALLBACK}`:
+        return handleCallback(request);
       default:
         return err(HTTP_STATUS.NOT_FOUND);
     }
@@ -82,13 +88,13 @@ async function handleOpenIdConfig(request: Request): Promise<Response> {
 
 function handleAuth(request: Request): Response {
   const currentUrl = new URL(request.url);
-  const originalRedirectUri = currentUrl.searchParams.get("redirect_uri");
+  const originalRedirectUri = currentUrl.searchParams.get(PARAM_REDIRECT_URI);
   if (!originalRedirectUri || !URL.canParse(originalRedirectUri))
     return err(HTTP_STATUS.BAD_REQUEST);
 
   const newRedirectUri = new URL(currentUrl);
   newRedirectUri.searchParams.set(
-    "redirect_uri",
+    PARAM_REDIRECT_URI,
     new URL(PATH_CALLBACK, currentUrl).toString(),
   );
   newRedirectUri.protocol = URL_AUTH.protocol;
@@ -96,20 +102,41 @@ function handleAuth(request: Request): Response {
   // This has to be set seperately, as `URL_AUTH` lacks a port.
   newRedirectUri.port = URL_AUTH.port;
   newRedirectUri.pathname = URL_AUTH.pathname;
-  const cookieAttrs = [
-    `redirect-uri=${encodeURIComponent(originalRedirectUri)}`,
-    `Path=${PATH_CALLBACK}`,
-    "HttpOnly",
-    "SameSite=Lax",
-  ];
   const headers = new Headers({
     Location: newRedirectUri.toString(),
-    "Set-Cookie": cookieAttrs.join("; "),
+    "Set-Cookie": stringifySetCookie({
+      name: COOKIE_REDIRECT_URI,
+      value: originalRedirectUri,
+      path: PATH_CALLBACK,
+      httpOnly: true,
+      sameSite: "lax",
+    }),
   });
 
   return new Response(null, {
     status: HTTP_STATUS.TEMPORARY_REDIRECT,
     headers,
+  });
+}
+
+function handleCallback(request: Request): Response {
+  const cookies = parseCookie(request.headers.get("cookie") ?? "");
+  const originalRedirectUri = cookies[COOKIE_REDIRECT_URI];
+  if (!originalRedirectUri) return err(HTTP_STATUS.BAD_REQUEST);
+
+  const location = URL.parse(originalRedirectUri);
+  if (!location) return err(HTTP_STATUS.BAD_REQUEST);
+  location.search = new URL(request.url).search;
+  return new Response(null, {
+    status: HTTP_STATUS.TEMPORARY_REDIRECT,
+    headers: new Headers({
+      Location: location.toString(),
+      "Set-Cookie": stringifySetCookie({
+        name: COOKIE_REDIRECT_URI,
+        value: undefined,
+        maxAge: -1,
+      }),
+    }),
   });
 }
 

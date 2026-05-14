@@ -21,6 +21,9 @@ catalogs:
     '@vitest/eslint-plugin':
       specifier: ^1.6.17
       version: 1.6.17
+    cookie:
+      specifier: ^1.1.1
+      version: 1.1.1
     eslint:
       specifier: ^10.2.0
       version: 10.2.0
@@ -166,6 +169,9 @@ importers:
 
   oauth-proxy:
     dependencies:
+      cookie:
+        specifier: 'catalog:'
+        version: 1.1.1
       zod:
         specifier: 'catalog:'
         version: 4.4.3

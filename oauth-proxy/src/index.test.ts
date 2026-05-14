@@ -1,9 +1,12 @@
+import { parseSetCookie, stringifyCookie } from "cookie";
 import { describe, expect, it as itBase } from "vitest";
 
 import { exports } from "cloudflare:workers";
 import {
+  COOKIE_REDIRECT_URI,
   HTTP_STATUS,
   OpenIdConfig,
+  PARAM_REDIRECT_URI,
   PATH_AUTH,
   PATH_CALLBACK,
   PATH_CONFIG,
@@ -13,14 +16,26 @@ const WORKER_BASE = new URL("https://worker.com");
 const UPSTREAM_BASE = new URL("https://upstream.com");
 const DOWNSTREAM_BASE = new URL("https://downstream.com");
 
+interface RequestOptions {
+  method?: string;
+  base?: URL;
+  cookies?: Record<string, string>;
+}
+
 async function makeRequest(
   pathname: string,
-  method: string = "GET",
-  base: URL = WORKER_BASE,
+  options?: RequestOptions,
 ): Promise<Response> {
-  return exports.default.fetch(new URL(pathname, base), {
-    method,
+  if (!options) options = {};
+  if (!options.method) options.method = "GET";
+  if (!options.base) options.base = WORKER_BASE;
+  if (!options.cookies) options.cookies = {};
+
+  const cookies = stringifyCookie(options.cookies);
+  return exports.default.fetch(new URL(pathname, options.base), {
+    method: options.method,
     redirect: "manual",
+    headers: new Headers({ Cookie: cookies }),
   });
 }
 
@@ -50,7 +65,7 @@ describe("openid config", () => {
     },
   );
 
-  it.for(["https://127.0.0.1:5137", "https://localhost:5137"])(
+  it.for(["https://127.0.0.1:5173", "https://localhost:5173"])(
     "should use http for local dev server",
     async (base) => {
       const url = new URL(PATH_CONFIG, base);
@@ -71,7 +86,7 @@ describe("openid config", () => {
 
 describe("auth", () => {
   const pathnameShouldPass = encodeURI(
-    `${PATH_AUTH}?redirect_uri=${DOWNSTREAM_BASE.toString()}&foo=bar`,
+    `${PATH_AUTH}?${PARAM_REDIRECT_URI}=${DOWNSTREAM_BASE.toString()}&foo=bar`,
   );
 
   it("should rewrite redirect_uri, retain other params, set cookies, and redirect", async () => {
@@ -86,7 +101,7 @@ describe("auth", () => {
 
   it.for([
     "foo=bar",
-    `redirect_uri=${encodeURIComponent("https//upstream.com")}`,
+    `${PARAM_REDIRECT_URI}=${encodeURIComponent("https//upstream.com")}`,
   ])("should return 400 on missing or invalid redirect_uri", async (params) => {
     const resp = await makeRequest(`${PATH_AUTH}?${params}`);
     expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
@@ -94,11 +109,10 @@ describe("auth", () => {
 
   describe("location header", () => {
     it("should have correct protocol, hostname and no port", async () => {
-      const resp = await makeRequest(
-        pathnameShouldPass,
-        "GET",
-        new URL("http://worker.com:5137"),
-      );
+      const resp = await makeRequest(pathnameShouldPass, {
+        method: "GET",
+        base: new URL("http://worker.com:5173"),
+      });
       expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
       expect(resp.headers.get("location")).toMatch(
         /^https:\/\/login.eveonline.com\//,
@@ -107,21 +121,112 @@ describe("auth", () => {
   });
 
   describe("rewritten redirect_uri", () => {
-    it.for(["http://127.0.0.1:5137", "https://preview.worker.com"])(
+    it.for(["http://127.0.0.1:5173", "https://preview.downstream.com"])(
       "should be based on current url",
       async (base) => {
-        const resp = await makeRequest(
-          pathnameShouldPass,
-          "GET",
-          new URL(base),
-        );
+        const resp = await makeRequest(pathnameShouldPass, {
+          method: "GET",
+          base: new URL(base),
+        });
         expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
 
         const location = new URL(resp.headers.get("location") ?? "");
-        const redirectUri = location.searchParams.get("redirect_uri");
+        const redirectUri = location.searchParams.get(PARAM_REDIRECT_URI);
         expect(redirectUri).toBe(`${base}${PATH_CALLBACK}`);
       },
     );
+  });
+
+  describe("set-cookie header", () => {
+    it.for(["http://127.0.0.1:5173", "https://preview.worker.com"])(
+      "shoud be based on original redirect_uri",
+      async (redirectUri) => {
+        const url = encodeURI(
+          `${PATH_AUTH}?${PARAM_REDIRECT_URI}=${redirectUri}`,
+        );
+        const resp = await makeRequest(url);
+        expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+
+        const setCookie = parseSetCookie(
+          resp.headers.getSetCookie().at(0) ?? "",
+        );
+        expect(setCookie.value).toBe(redirectUri);
+      },
+    );
+  });
+});
+
+describe("callback", () => {
+  it("should redirect to the original redirect_uri, and delete cookie", async () => {
+    const resp = await makeRequest(PATH_CALLBACK, {
+      cookies: { [`${COOKIE_REDIRECT_URI}`]: DOWNSTREAM_BASE.toString() },
+    });
+    expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+    expect(Object.fromEntries(resp.headers.entries())).toMatchInlineSnapshot(
+      `{
+  "location": "https://downstream.com/",
+  "set-cookie": "redirect-uri=; Max-Age=-1",
+}`,
+    );
+  });
+
+  it.for([
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    {} as Record<string, string>,
+    { [`${COOKIE_REDIRECT_URI}`]: "https//worker.com" },
+  ])("should return 400 on missing or invalid cookie", async (cookies) => {
+    const resp = await makeRequest(PATH_CALLBACK, { cookies });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+  });
+
+  describe("location header", () => {
+    it.for(["http://127.0.0.1:5173/", "https://preview.worker.com/"])(
+      "should be based on cookie",
+      async (redirectUri) => {
+        const resp = await makeRequest(PATH_CALLBACK, {
+          cookies: { [`${COOKIE_REDIRECT_URI}`]: redirectUri },
+        });
+        expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+        expect(resp.headers.get("location")).toBe(redirectUri);
+      },
+    );
+
+    it.for(["", "?foo=bar", "?state=some-state&code=some-code"])(
+      "should leave all params untouched, be they correct or not",
+      async (params) => {
+        const resp = await makeRequest(`${PATH_CALLBACK}/${params}`, {
+          cookies: { [`${COOKIE_REDIRECT_URI}`]: DOWNSTREAM_BASE.toString() },
+        });
+        expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+        expect(resp.headers.get("location")).toBe(
+          `${DOWNSTREAM_BASE.toString()}${params}`,
+        );
+      },
+    );
+
+    it.for(["?state=123&code=456", "?foo=bar"])(
+      "should remove any params set in cookie",
+      async (params) => {
+        const callbackParams = "?state=some-state&code=some-code";
+        const resp = await makeRequest(`${PATH_CALLBACK}/${callbackParams}`, {
+          cookies: {
+            [`${COOKIE_REDIRECT_URI}`]: `${DOWNSTREAM_BASE.toString()}${params}`,
+          },
+        });
+        expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+        expect(resp.headers.get("location")).toBe(
+          `${DOWNSTREAM_BASE.toString()}${callbackParams}`,
+        );
+      },
+    );
+  });
+
+  it("should append / to root path, if not present", async () => {
+    const resp = await makeRequest(PATH_CALLBACK, {
+      cookies: { [`${COOKIE_REDIRECT_URI}`]: "https://worker.com" },
+    });
+    expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
+    expect(resp.headers.get("location")).toBe("https://worker.com/");
   });
 });
 
@@ -134,8 +239,9 @@ describe("fallback", () => {
   it.for([
     [PATH_CONFIG, "POST"],
     [PATH_AUTH, "POST"],
+    [PATH_CALLBACK, "POST"],
   ])("should fallback to 404 on wrong methods", async ([pathname, method]) => {
-    const resp = await makeRequest(pathname, method);
+    const resp = await makeRequest(pathname, { method });
     expect(resp.status).toBe(HTTP_STATUS.NOT_FOUND);
   });
 });

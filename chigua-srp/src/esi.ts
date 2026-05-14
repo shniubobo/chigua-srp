@@ -13,9 +13,8 @@ import { toDateString } from "xe-utils";
 
 import { ErrorMessage, throwOnStatus } from "./error";
 
-const OAUTH_URL_BASE = new URL("https://login.eveonline.com/");
+const OAUTH_URL_BASE = new URL(import.meta.env.VITE_OAUTH_PROXY as string);
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID as string;
-const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI as string;
 const SCOPES = ["publicData", "esi-mail.read_mail.v1", "esi-ui.open_window.v1"];
 const COOKIE_STATE = "esi-sso-state";
 const COOKIE_CODE_VERIFIER = "esi-sso-code-verifier";
@@ -69,7 +68,7 @@ export async function prepareToRedirect(): Promise<URL> {
   cookies.set(COOKIE_CODE_VERIFIER, codeVerifier, { maxAge: COOKIE_MAX_AGE });
 
   const urlToRedirectTo = openid.buildAuthorizationUrl(oauthConfig, {
-    redirect_uri: REDIRECT_URI,
+    redirect_uri: window.location.href,
     scope: SCOPES.join(" "),
     state: state,
     code_challenge: codeChallenge,
@@ -110,7 +109,21 @@ let oauthConfig: openid.Configuration;
 
 async function fetchOAuthConfig(): Promise<openid.Configuration> {
   if (oauthConfig === undefined) {
-    oauthConfig = await openid.discovery(OAUTH_URL_BASE, CLIENT_ID);
+    oauthConfig = await openid.discovery(
+      OAUTH_URL_BASE,
+      CLIENT_ID,
+      undefined,
+      undefined,
+      {
+        // A response time of more than 30 seconds (which is the default
+        // setting) has been observed in dev env, so relax the timeout
+        // just in case the same happens in prod env.
+        timeout: 60,
+        execute: import.meta.env.DEV
+          ? [openid.allowInsecureRequests]
+          : undefined,
+      },
+    );
   }
   return oauthConfig;
 }
