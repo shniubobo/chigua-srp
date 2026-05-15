@@ -20,6 +20,8 @@ export const enum GRANT_TYPE {
   REFRESH = "refresh_token",
 }
 
+export const HEADER_CORS_ORIGIN = "Access-Control-Allow-Origin";
+
 export const OpenIdConfig = z.looseObject({
   authorization_endpoint: z.url({ protocol: /^https?$/ }),
   token_endpoint: z.url({ protocol: /^https?$/ }),
@@ -36,23 +38,44 @@ export const enum HTTP_STATUS {
 
 export default {
   async fetch(request, _env, _ctx): Promise<Response> {
-    const currentUrl = new URL(request.url);
-    const pathname = currentUrl.pathname.replace(/\/$/, "");
+    let resp = await handleFetch(request);
 
-    switch (`${request.method}:${pathname}`) {
-      case `GET:${PATH_CONFIG}`:
-        return handleOpenIdConfig(request);
-      case `GET:${PATH_AUTH}`:
-        return handleAuth(request);
-      case `GET:${PATH_CALLBACK}`:
-        return handleCallback(request);
-      case `POST:${PATH_TOKEN}`:
-        return handleToken(request);
-      default:
-        return err(HTTP_STATUS.NOT_FOUND);
+    try {
+      resp.headers.set(HEADER_CORS_ORIGIN, "*");
+    } catch (e) {
+      if (!(e instanceof TypeError)) throw e;
+
+      // `handleToken` directly returns the upstream response, which itself, and
+      // whose headers, are immutable, so we have to create a new `Response`
+      // from it.
+      //
+      // ESI OAuth returns a CORS header, but it seems to be stripped away by
+      // cloudflare, so we have to add one anyway.
+      resp = new Response(resp.body, resp);
+      resp.headers.set(HEADER_CORS_ORIGIN, "*");
     }
+
+    return resp;
   },
 } satisfies ExportedHandler<Env>;
+
+async function handleFetch(request: Request): Promise<Response> {
+  const currentUrl = new URL(request.url);
+  const pathname = currentUrl.pathname.replace(/\/$/, "");
+
+  switch (`${request.method}:${pathname}`) {
+    case `GET:${PATH_CONFIG}`:
+      return handleOpenIdConfig(request);
+    case `GET:${PATH_AUTH}`:
+      return handleAuth(request);
+    case `GET:${PATH_CALLBACK}`:
+      return handleCallback(request);
+    case `POST:${PATH_TOKEN}`:
+      return handleToken(request);
+    default:
+      return err(HTTP_STATUS.NOT_FOUND);
+  }
+}
 
 async function handleOpenIdConfig(request: Request): Promise<Response> {
   const config = await fetch(URL_CONFIG);
@@ -153,7 +176,14 @@ async function handleToken(request: Request): Promise<Response> {
   const currentUrl = new URL(request.url);
   if (currentUrl.search) return err(HTTP_STATUS.BAD_REQUEST);
 
-  const formData = await request.formData();
+  let formData;
+  try {
+    formData = await request.formData();
+  } catch (e) {
+    if (e instanceof TypeError) return err(HTTP_STATUS.BAD_REQUEST);
+    throw e;
+  }
+
   const grantType = formData.get(PARAM_GRANT_TYPE);
   const originalRedirectUri = formData.getAll(PARAM_REDIRECT_URI);
 

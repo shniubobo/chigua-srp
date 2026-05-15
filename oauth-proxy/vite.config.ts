@@ -51,9 +51,7 @@ async function handleOutboundService(request: Request): Promise<Response> {
         });
 
       const formData = await request.formData();
-      return Response.json({
-        received: Object.fromEntries(formData),
-      });
+      return Response.json({ received: Object.fromEntries(formData) });
     }
     case `POST:/faulty/true`:
       faultyUpstream = true;

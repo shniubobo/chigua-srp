@@ -5,6 +5,7 @@ import { exports } from "cloudflare:workers";
 import {
   COOKIE_REDIRECT_URI,
   GRANT_TYPE,
+  HEADER_CORS_ORIGIN,
   HTTP_STATUS,
   OpenIdConfig,
   PARAM_GRANT_TYPE,
@@ -59,6 +60,20 @@ const it = itBase.extend("faultyUpstream", async ({}, { onCleanup }) => {
   );
 });
 
+describe("common", () => {
+  it.for([
+    [PATH_CONFIG, "GET"],
+    [PATH_CONFIG, "POST"],
+    [PATH_AUTH, "GET"],
+    [PATH_AUTH, "POST"],
+    [PATH_TOKEN, "GET"],
+    [PATH_TOKEN, "POST"],
+  ])("return CORS headers no matter what", async ([pathname, method]) => {
+    const resp = await makeRequest(pathname, { method });
+    expect(resp.headers.get(HEADER_CORS_ORIGIN)).toBe("*");
+  });
+});
+
 describe("openid config", () => {
   it.for([PATH_CONFIG, `${PATH_CONFIG}/`])(
     "modify two urls, and retain the others",
@@ -104,6 +119,7 @@ describe("auth", () => {
 
     expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
     expect(Object.fromEntries(resp.headers.entries())).toMatchInlineSnapshot(`{
+  "access-control-allow-origin": "*",
   "location": "https://login.eveonline.com/v2/oauth/authorize?redirect_uri=https%3A%2F%2Fworker.com%2Fcallback&foo=bar",
   "set-cookie": "redirect-uri=https%3A%2F%2Fdownstream.com%2F; Path=/callback; HttpOnly; SameSite=Lax",
 }`);
@@ -174,6 +190,7 @@ describe("callback", () => {
     expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
     expect(Object.fromEntries(resp.headers.entries())).toMatchInlineSnapshot(
       `{
+  "access-control-allow-origin": "*",
   "location": "https://downstream.com/",
   "set-cookie": "redirect-uri=; Max-Age=-1",
 }`,
@@ -304,6 +321,13 @@ describe("token", () => {
       const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
       expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
     });
+  });
+
+  it("return 400 when form data fail to parse", async () => {
+    // When `body` is not specified, the `Content-Type` header is not set for
+    // us, which causes form data parsing to fail.
+    const resp = await makeRequest(PATH_TOKEN, { method: "POST" });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
   });
 
   it("return 400 on other grant_type values", async () => {
