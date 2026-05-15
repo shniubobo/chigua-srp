@@ -1,5 +1,6 @@
 {
   "include": [
+    "env.d.ts",
     "eslint.config.ts",
     "vite.config.ts",
     "worker-configuration.d.ts",

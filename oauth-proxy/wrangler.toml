@@ -9,3 +9,9 @@ send_metrics = false
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+[[ratelimits]]
+name = "RATE_LIMIT"
+namespace_id = "983240"
+# Not sure if this is too strict or too lax; observations needed.
+simple = { limit = 30, period = 60 }

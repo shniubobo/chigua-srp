@@ -32,12 +32,15 @@ export const enum HTTP_STATUS {
   TEMPORARY_REDIRECT = 307,
   BAD_REQUEST = 400,
   NOT_FOUND = 404,
+  TOO_MANY_REQUESTS = 429,
   INTERNAL_SERVER_ERROR = 500,
   BAD_GATEWAY = 502,
 }
 
 export default {
-  async fetch(request, _env, _ctx): Promise<Response> {
+  async fetch(request, env, _ctx): Promise<Response> {
+    if (await hitRateLimit(request, env))
+      return err(HTTP_STATUS.TOO_MANY_REQUESTS);
     let resp = await handleFetch(request);
 
     try {
@@ -58,6 +61,16 @@ export default {
     return resp;
   },
 } satisfies ExportedHandler<Env>;
+
+// TODO: Think of a way to test this.
+async function hitRateLimit(request: Request, env: Env): Promise<boolean> {
+  if (import.meta.env.DEV) return false;
+
+  // We have no better choices.
+  const ip = request.headers.get("cf-connecting-ip") ?? "none";
+  const { success } = await env.RATE_LIMIT.limit({ key: ip });
+  return !success;
+}
 
 async function handleFetch(request: Request): Promise<Response> {
   const currentUrl = new URL(request.url);
