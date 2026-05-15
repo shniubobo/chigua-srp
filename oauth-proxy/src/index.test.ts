@@ -4,8 +4,10 @@ import { describe, expect, it as itBase } from "vitest";
 import { exports } from "cloudflare:workers";
 import {
   COOKIE_REDIRECT_URI,
+  GRANT_TYPE,
   HTTP_STATUS,
   OpenIdConfig,
+  PARAM_GRANT_TYPE,
   PARAM_REDIRECT_URI,
   PATH_AUTH,
   PATH_CALLBACK,
@@ -239,58 +241,117 @@ describe("callback", () => {
 });
 
 describe("token", () => {
-  it("rewrite redirect_uri, retain other params, and forward to upstream", async () => {
-    const body = new FormData();
-    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
-    body.set("foo", "bar");
+  describe("authorization_code", () => {
+    it("rewrite redirect_uri, retain other params, and forward to upstream", async () => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, GRANT_TYPE.REDEEM);
+      body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+      body.set("foo", "bar");
 
-    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
-    expect(resp.status).toBe(HTTP_STATUS.OK);
-    expect(await resp.json()).toMatchObject({
-      received: {
-        [PARAM_REDIRECT_URI]: "https://worker.com/callback",
-        foo: "bar",
-      },
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.OK);
+      expect(await resp.json()).toMatchObject({
+        received: {
+          [PARAM_GRANT_TYPE]: GRANT_TYPE.REDEEM,
+          [PARAM_REDIRECT_URI]: "https://worker.com/callback",
+          foo: "bar",
+        },
+      });
+    });
+
+    it("return 400 on missing redirect_uri", async () => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, GRANT_TYPE.REDEEM);
+      body.set("foo", "bar");
+
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+    });
+
+    it("return 400 on multiple redirect_uri occurrences", async () => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, GRANT_TYPE.REDEEM);
+      body.append(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+      body.append(PARAM_REDIRECT_URI, "https://worker.com/callback");
+
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
     });
   });
 
-  it("return 400 on missing redirect_uri", async () => {
+  describe("refresh_token", () => {
+    it("retain all params, with the absence of redirect_uri", async () => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, GRANT_TYPE.REFRESH);
+      body.set("foo", "bar");
+
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.OK);
+      expect(await resp.json()).toMatchObject({
+        received: {
+          [PARAM_GRANT_TYPE]: GRANT_TYPE.REFRESH,
+          foo: "bar",
+        },
+      });
+    });
+
+    it("return 400 when redirect_uri is present", async () => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, GRANT_TYPE.REFRESH);
+      body.append(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+      body.set("foo", "bar");
+
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+    });
+  });
+
+  it("return 400 on other grant_type values", async () => {
     const body = new FormData();
-    body.set("foo", "bar");
+    body.set(PARAM_GRANT_TYPE, "something_else");
 
     const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
     expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
   });
 
-  it("return 400 on multiple redirect_uri occurrences", async () => {
+  it("return 400 on missing grant_type", async () => {
     const body = new FormData();
-    body.append(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
-    body.append(PARAM_REDIRECT_URI, "https://worker.com/callback");
+    body.set("foo", "bar");
 
     const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
     expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
   });
 
   // TODO: Maybe we should instead silently ignore query params?
-  it("return 400 on non-empty query params", async () => {
-    const body = new FormData();
-    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+  it.for([GRANT_TYPE.REDEEM, GRANT_TYPE.REFRESH])(
+    "return 400 on non-empty query params",
+    async (grantType) => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, grantType);
+      if (grantType === GRANT_TYPE.REDEEM)
+        body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
 
-    const resp = await makeRequest(`${PATH_TOKEN}?foo=bar`, {
-      method: "POST",
-      body,
-    });
-    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
-  });
+      const resp = await makeRequest(`${PATH_TOKEN}?foo=bar`, {
+        method: "POST",
+        body,
+      });
+      expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+    },
+  );
 
   // TODO: Should we instead pass-through all non-OK responses?
-  it("return 502 on faulty upstream", async ({ faultyUpstream: _ }) => {
-    const body = new FormData();
-    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+  it.for([GRANT_TYPE.REDEEM, GRANT_TYPE.REFRESH])(
+    "return 502 on faulty upstream",
+    async (grantType, { faultyUpstream: _ }) => {
+      const body = new FormData();
+      body.set(PARAM_GRANT_TYPE, grantType);
+      if (grantType === GRANT_TYPE.REDEEM)
+        body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
 
-    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
-    expect(resp.status).toBe(HTTP_STATUS.BAD_GATEWAY);
-  });
+      const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+      expect(resp.status).toBe(HTTP_STATUS.BAD_GATEWAY);
+    },
+  );
 });
 
 describe("fallback", () => {

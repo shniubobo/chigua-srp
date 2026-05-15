@@ -14,6 +14,12 @@ export const URL_TOKEN = new URL(PATH_TOKEN, URL_BASE);
 export const PARAM_REDIRECT_URI = "redirect_uri";
 export const COOKIE_REDIRECT_URI = "redirect-uri";
 
+export const PARAM_GRANT_TYPE = "grant_type";
+export const enum GRANT_TYPE {
+  REDEEM = "authorization_code",
+  REFRESH = "refresh_token",
+}
+
 export const OpenIdConfig = z.looseObject({
   authorization_endpoint: z.url({ protocol: /^https?$/ }),
   token_endpoint: z.url({ protocol: /^https?$/ }),
@@ -148,19 +154,26 @@ async function handleToken(request: Request): Promise<Response> {
   if (currentUrl.search) return err(HTTP_STATUS.BAD_REQUEST);
 
   const formData = await request.formData();
+  const grantType = formData.get(PARAM_GRANT_TYPE);
   const originalRedirectUri = formData.getAll(PARAM_REDIRECT_URI);
-  if (originalRedirectUri.length !== 1) return err(HTTP_STATUS.BAD_REQUEST);
 
-  // We don't check whether `originalRedirectUri` is a valid URI here, and that
-  // is intentional. We've checked that in `handleAuth`, and the upstream will
-  // make sure it remains the same throughout the OAuth flow.
+  if (grantType === GRANT_TYPE.REDEEM) {
+    if (originalRedirectUri.length !== 1) return err(HTTP_STATUS.BAD_REQUEST);
 
-  const newRedirectUri = new URL(PATH_CALLBACK, request.url);
-  formData.set(PARAM_REDIRECT_URI, newRedirectUri.toString());
+    // We don't check whether `originalRedirectUri` is a valid URI here, and
+    // that is intentional. We've checked that in `handleAuth`, and the upstream
+    // will make sure it remains the same throughout the OAuth flow.
+
+    const newRedirectUri = new URL(PATH_CALLBACK, request.url);
+    formData.set(PARAM_REDIRECT_URI, newRedirectUri.toString());
+  } else if (grantType === GRANT_TYPE.REFRESH) {
+    if (originalRedirectUri.length !== 0) return err(HTTP_STATUS.BAD_REQUEST);
+  } else {
+    return err(HTTP_STATUS.BAD_REQUEST);
+  }
 
   const upstream = await fetch(URL_TOKEN, { method: "POST", body: formData });
   if (!upstream.ok) return err(HTTP_STATUS.BAD_GATEWAY);
-
   return upstream;
 }
 
