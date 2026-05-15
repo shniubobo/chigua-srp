@@ -1,12 +1,15 @@
 import { parseCookie, stringifySetCookie } from "cookie";
 import * as z from "zod";
 
-export const URL_BASE = new URL("https://login.eveonline.com/");
 export const PATH_CONFIG = "/.well-known/openid-configuration";
-export const URL_CONFIG = new URL(PATH_CONFIG, URL_BASE);
 export const PATH_AUTH = "/v2/oauth/authorize";
-export const URL_AUTH = new URL(PATH_AUTH, URL_BASE);
+export const PATH_TOKEN = "/v2/oauth/token";
 export const PATH_CALLBACK = "/callback";
+
+export const URL_BASE = new URL("https://login.eveonline.com/");
+export const URL_CONFIG = new URL(PATH_CONFIG, URL_BASE);
+export const URL_AUTH = new URL(PATH_AUTH, URL_BASE);
+export const URL_TOKEN = new URL(PATH_TOKEN, URL_BASE);
 
 export const PARAM_REDIRECT_URI = "redirect_uri";
 export const COOKIE_REDIRECT_URI = "redirect-uri";
@@ -37,6 +40,8 @@ export default {
         return handleAuth(request);
       case `GET:${PATH_CALLBACK}`:
         return handleCallback(request);
+      case `POST:${PATH_TOKEN}`:
+        return handleToken(request);
       default:
         return err(HTTP_STATUS.NOT_FOUND);
     }
@@ -45,7 +50,7 @@ export default {
 
 async function handleOpenIdConfig(request: Request): Promise<Response> {
   const config = await fetch(URL_CONFIG);
-  if (!isOk(config.status)) return err(HTTP_STATUS.BAD_GATEWAY);
+  if (!config.ok) return err(HTTP_STATUS.BAD_GATEWAY);
 
   let configJson;
   let configParsed;
@@ -92,18 +97,16 @@ function handleAuth(request: Request): Response {
   if (!originalRedirectUri || !URL.canParse(originalRedirectUri))
     return err(HTTP_STATUS.BAD_REQUEST);
 
-  const newRedirectUri = new URL(currentUrl);
-  newRedirectUri.searchParams.set(
-    PARAM_REDIRECT_URI,
-    new URL(PATH_CALLBACK, currentUrl).toString(),
-  );
-  newRedirectUri.protocol = URL_AUTH.protocol;
-  newRedirectUri.host = URL_AUTH.host;
+  const location = new URL(currentUrl);
+  const newRedirectUri = new URL(PATH_CALLBACK, currentUrl);
+  location.searchParams.set(PARAM_REDIRECT_URI, newRedirectUri.toString());
+  location.protocol = URL_AUTH.protocol;
+  location.host = URL_AUTH.host;
   // This has to be set seperately, as `URL_AUTH` lacks a port.
-  newRedirectUri.port = URL_AUTH.port;
-  newRedirectUri.pathname = URL_AUTH.pathname;
+  location.port = URL_AUTH.port;
+  location.pathname = URL_AUTH.pathname;
   const headers = new Headers({
-    Location: newRedirectUri.toString(),
+    Location: location.toString(),
     "Set-Cookie": stringifySetCookie({
       name: COOKIE_REDIRECT_URI,
       value: originalRedirectUri,
@@ -140,8 +143,25 @@ function handleCallback(request: Request): Response {
   });
 }
 
-function isOk(status: number): boolean {
-  return Math.floor(status / 100) === 2;
+async function handleToken(request: Request): Promise<Response> {
+  const currentUrl = new URL(request.url);
+  if (currentUrl.search) return err(HTTP_STATUS.BAD_REQUEST);
+
+  const formData = await request.formData();
+  const originalRedirectUri = formData.getAll(PARAM_REDIRECT_URI);
+  if (originalRedirectUri.length !== 1) return err(HTTP_STATUS.BAD_REQUEST);
+
+  // We don't check whether `originalRedirectUri` is a valid URI here, and that
+  // is intentional. We've checked that in `handleAuth`, and the upstream will
+  // make sure it remains the same throughout the OAuth flow.
+
+  const newRedirectUri = new URL(PATH_CALLBACK, request.url);
+  formData.set(PARAM_REDIRECT_URI, newRedirectUri.toString());
+
+  const upstream = await fetch(URL_TOKEN, { method: "POST", body: formData });
+  if (!upstream.ok) return err(HTTP_STATUS.BAD_GATEWAY);
+
+  return upstream;
 }
 
 function err(status: HTTP_STATUS): Response {

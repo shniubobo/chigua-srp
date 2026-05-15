@@ -10,6 +10,7 @@ import {
   PATH_AUTH,
   PATH_CALLBACK,
   PATH_CONFIG,
+  PATH_TOKEN,
 } from "./index";
 
 const WORKER_BASE = new URL("https://worker.com");
@@ -20,6 +21,8 @@ interface RequestOptions {
   method?: string;
   base?: URL;
   cookies?: Record<string, string>;
+  headers?: HeadersInit;
+  body?: BodyInit;
 }
 
 async function makeRequest(
@@ -30,12 +33,17 @@ async function makeRequest(
   if (!options.method) options.method = "GET";
   if (!options.base) options.base = WORKER_BASE;
   if (!options.cookies) options.cookies = {};
+  if (!options.headers) options.headers = new Headers();
 
   const cookies = stringifyCookie(options.cookies);
+  const headers = new Headers(options.headers);
+  headers.set("Cookie", cookies);
+
   return exports.default.fetch(new URL(pathname, options.base), {
     method: options.method,
     redirect: "manual",
-    headers: new Headers({ Cookie: cookies }),
+    headers,
+    body: options.body,
   });
 }
 
@@ -51,7 +59,7 @@ const it = itBase.extend("faultyUpstream", async ({}, { onCleanup }) => {
 
 describe("openid config", () => {
   it.for([PATH_CONFIG, `${PATH_CONFIG}/`])(
-    "should modify two urls, and retain the others",
+    "modify two urls, and retain the others",
     async (pathname) => {
       const resp = await makeRequest(pathname);
       expect(resp.status).toBe(HTTP_STATUS.OK);
@@ -66,7 +74,7 @@ describe("openid config", () => {
   );
 
   it.for(["https://127.0.0.1:5173", "https://localhost:5173"])(
-    "should use http for local dev server",
+    "use http for local dev server",
     async (base) => {
       const url = new URL(PATH_CONFIG, base);
       const resp = await exports.default.fetch(url);
@@ -78,7 +86,7 @@ describe("openid config", () => {
     },
   );
 
-  it("should return 502 on faulty upstream", async ({ faultyUpstream: _ }) => {
+  it("return 502 on faulty upstream", async ({ faultyUpstream: _ }) => {
     const resp = await makeRequest(PATH_CONFIG);
     expect(resp.status).toBe(HTTP_STATUS.BAD_GATEWAY);
   });
@@ -89,7 +97,7 @@ describe("auth", () => {
     `${PATH_AUTH}?${PARAM_REDIRECT_URI}=${DOWNSTREAM_BASE.toString()}&foo=bar`,
   );
 
-  it("should rewrite redirect_uri, retain other params, set cookies, and redirect", async () => {
+  it("rewrite redirect_uri, retain other params, set cookies, and redirect", async () => {
     const resp = await makeRequest(pathnameShouldPass);
 
     expect(resp.status).toBe(HTTP_STATUS.TEMPORARY_REDIRECT);
@@ -102,13 +110,13 @@ describe("auth", () => {
   it.for([
     "foo=bar",
     `${PARAM_REDIRECT_URI}=${encodeURIComponent("https//upstream.com")}`,
-  ])("should return 400 on missing or invalid redirect_uri", async (params) => {
+  ])("return 400 on missing or invalid redirect_uri", async (params) => {
     const resp = await makeRequest(`${PATH_AUTH}?${params}`);
     expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
   });
 
   describe("location header", () => {
-    it("should have correct protocol, hostname and no port", async () => {
+    it("have correct protocol, hostname and no port", async () => {
       const resp = await makeRequest(pathnameShouldPass, {
         method: "GET",
         base: new URL("http://worker.com:5173"),
@@ -122,7 +130,7 @@ describe("auth", () => {
 
   describe("rewritten redirect_uri", () => {
     it.for(["http://127.0.0.1:5173", "https://preview.downstream.com"])(
-      "should be based on current url",
+      "be based on current url",
       async (base) => {
         const resp = await makeRequest(pathnameShouldPass, {
           method: "GET",
@@ -157,7 +165,7 @@ describe("auth", () => {
 });
 
 describe("callback", () => {
-  it("should redirect to the original redirect_uri, and delete cookie", async () => {
+  it("redirect to the original redirect_uri, and delete cookie", async () => {
     const resp = await makeRequest(PATH_CALLBACK, {
       cookies: { [`${COOKIE_REDIRECT_URI}`]: DOWNSTREAM_BASE.toString() },
     });
@@ -174,14 +182,14 @@ describe("callback", () => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     {} as Record<string, string>,
     { [`${COOKIE_REDIRECT_URI}`]: "https//worker.com" },
-  ])("should return 400 on missing or invalid cookie", async (cookies) => {
+  ])("return 400 on missing or invalid cookie", async (cookies) => {
     const resp = await makeRequest(PATH_CALLBACK, { cookies });
     expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
   });
 
   describe("location header", () => {
     it.for(["http://127.0.0.1:5173/", "https://preview.worker.com/"])(
-      "should be based on cookie",
+      "be based on cookie",
       async (redirectUri) => {
         const resp = await makeRequest(PATH_CALLBACK, {
           cookies: { [`${COOKIE_REDIRECT_URI}`]: redirectUri },
@@ -192,7 +200,7 @@ describe("callback", () => {
     );
 
     it.for(["", "?foo=bar", "?state=some-state&code=some-code"])(
-      "should leave all params untouched, be they correct or not",
+      "leave all params untouched, be they correct or not",
       async (params) => {
         const resp = await makeRequest(`${PATH_CALLBACK}/${params}`, {
           cookies: { [`${COOKIE_REDIRECT_URI}`]: DOWNSTREAM_BASE.toString() },
@@ -205,7 +213,7 @@ describe("callback", () => {
     );
 
     it.for(["?state=123&code=456", "?foo=bar"])(
-      "should remove any params set in cookie",
+      "remove any params set in cookie",
       async (params) => {
         const callbackParams = "?state=some-state&code=some-code";
         const resp = await makeRequest(`${PATH_CALLBACK}/${callbackParams}`, {
@@ -221,7 +229,7 @@ describe("callback", () => {
     );
   });
 
-  it("should append / to root path, if not present", async () => {
+  it("append / to root path, if not present", async () => {
     const resp = await makeRequest(PATH_CALLBACK, {
       cookies: { [`${COOKIE_REDIRECT_URI}`]: "https://worker.com" },
     });
@@ -230,8 +238,63 @@ describe("callback", () => {
   });
 });
 
+describe("token", () => {
+  it("rewrite redirect_uri, retain other params, and forward to upstream", async () => {
+    const body = new FormData();
+    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+    body.set("foo", "bar");
+
+    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+    expect(resp.status).toBe(HTTP_STATUS.OK);
+    expect(await resp.json()).toMatchObject({
+      received: {
+        [PARAM_REDIRECT_URI]: "https://worker.com/callback",
+        foo: "bar",
+      },
+    });
+  });
+
+  it("return 400 on missing redirect_uri", async () => {
+    const body = new FormData();
+    body.set("foo", "bar");
+
+    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+  });
+
+  it("return 400 on multiple redirect_uri occurrences", async () => {
+    const body = new FormData();
+    body.append(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+    body.append(PARAM_REDIRECT_URI, "https://worker.com/callback");
+
+    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+  });
+
+  // TODO: Maybe we should instead silently ignore query params?
+  it("return 400 on non-empty query params", async () => {
+    const body = new FormData();
+    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+
+    const resp = await makeRequest(`${PATH_TOKEN}?foo=bar`, {
+      method: "POST",
+      body,
+    });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_REQUEST);
+  });
+
+  // TODO: Should we instead pass-through all non-OK responses?
+  it("return 502 on faulty upstream", async ({ faultyUpstream: _ }) => {
+    const body = new FormData();
+    body.set(PARAM_REDIRECT_URI, DOWNSTREAM_BASE.toString());
+
+    const resp = await makeRequest(PATH_TOKEN, { method: "POST", body });
+    expect(resp.status).toBe(HTTP_STATUS.BAD_GATEWAY);
+  });
+});
+
 describe("fallback", () => {
-  it.for(["/", "/foo"])("should return 404", async (pathname) => {
+  it.for(["/", "/foo"])("return 404", async (pathname) => {
     const resp = await makeRequest(pathname);
     expect(resp.status).toBe(HTTP_STATUS.NOT_FOUND);
   });
@@ -240,7 +303,8 @@ describe("fallback", () => {
     [PATH_CONFIG, "POST"],
     [PATH_AUTH, "POST"],
     [PATH_CALLBACK, "POST"],
-  ])("should fallback to 404 on wrong methods", async ([pathname, method]) => {
+    [PATH_TOKEN, "GET"],
+  ])("fallback to 404 on wrong methods", async ([pathname, method]) => {
     const resp = await makeRequest(pathname, { method });
     expect(resp.status).toBe(HTTP_STATUS.NOT_FOUND);
   });
