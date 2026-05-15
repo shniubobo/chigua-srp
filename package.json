@@ -1,8 +1,7 @@
 {
   "scripts": {
-    "dev": "pnpm -F '*' dev",
     "dist": "pnpm -F '*' dist",
     "preview": "pnpm -F '*' preview",
-    "lint": "editorconfig-checker  && pnpm -F '*' lint"
+    "lint": "editorconfig-checker && pnpm -F '*' lint"
   }
 }
