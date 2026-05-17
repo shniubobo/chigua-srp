@@ -3,7 +3,6 @@
     <template #header-left>
       <span class="border-e border-gray-300 pr-2">
         <VxeDateRangePicker
-          v-if="isLoggedIn()"
           v-model:start-value="startDateTimeString"
           v-model:end-value="endDateTimeString"
           type="datetime"
@@ -13,11 +12,7 @@
           clearable
           class="mr-2"
         ></VxeDateRangePicker>
-        <VxeButton
-          v-if="isLoggedIn()"
-          status="primary"
-          :loading
-          @click="onFetchKillmails()"
+        <VxeButton status="primary" :loading @click="onFetchKillmails()"
           >拉取</VxeButton
         >
       </span>
@@ -45,7 +40,7 @@
 import { computed, ref } from "vue";
 import { VxeButton, VxeDateRangePicker, VxeSwitch, VxeUI } from "vxe-pc-ui";
 
-import { fetchKillmails, isLoggedIn } from "./esi";
+import { fetchKillmails } from "./esi";
 import KmInfoTable from "./KmInfoTable.vue";
 import { buildSrpData, type Reviews, type SrpData } from "./srp";
 import SrpTab from "./SrpTab.vue";
