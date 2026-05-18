@@ -101,7 +101,6 @@ const srpOutcome = useSrpOutcomeStore();
 watch(
   () => srpOutcome.srpOutcome,
   () => {
-    console.log("triggered");
     rows.value = Array.from(
       srpOutcome.srpOutcome
         .entries()

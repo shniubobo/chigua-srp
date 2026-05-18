@@ -271,6 +271,7 @@ export type Reviews = Map<string, ReviewEntry>;
 export interface ReviewEntry {
   approve: boolean;
   reject: boolean;
+  exemptMIsk: number | null;
 }
 
 export async function buildSrpData(killmails: Killmail[]): Promise<SrpData> {

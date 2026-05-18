@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, reactive, useTemplateRef } from "vue";
-import { VxeButton, VxeTag } from "vxe-pc-ui";
+import { computed, reactive, ref, useTemplateRef, watch } from "vue";
+import { VxeButton, VxeModal, VxeNumberInput, VxeTag } from "vxe-pc-ui";
 import {
   VxeColumn,
   VxeTable,
   type VxeTableInstance,
   type VxeTablePropTypes,
 } from "vxe-table";
-import { getSrpPayee, type SrpPayee } from "./srp";
+
+import { getSrpPayee, type ReviewEntry, type SrpPayee } from "./srp";
 import { useSrpOutcomeStore } from "./stores/srpOutcomeStore";
 
 interface Row {
@@ -104,11 +105,15 @@ const aggregateConfig = reactive<VxeTablePropTypes.AggregateConfig<Row>>({
       return children
         .filter(
           (child) =>
-            !isAwaitingReview(child) &&
-            !isManuallyRejected(child) &&
-            child.srpPrice !== null,
+            (!isAwaitingReview(child) &&
+              !isManuallyRejected(child) &&
+              child.srpPrice !== null) ||
+            isExempted(child),
         )
-        .map((child) => child.srpPrice!)
+        .map(
+          (child) =>
+            child.srpPrice ?? srpOutcome.getReview(child.id)!.exemptMIsk!,
+        )
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return 0;
   },
@@ -125,7 +130,15 @@ function formatDateEt(
   return `${matches.groups!.date} ${matches.groups!.time}`;
 }
 
+function formatSrpModifier(row: Row): string {
+  if (isExempted(row)) return "特例通过";
+  if (row.srpModifier === 1) return "固定金额";
+  if (row.srpModifier === null) return "";
+  return `${row.srpModifier * 100}%`;
+}
+
 function formatSrpPrice(row: Row): string {
+  if (isExempted(row)) return `${srpOutcome.getReview(row.id)!.exemptMIsk}m`;
   if (isAwaitingReview(row)) return "等待审核";
   if (isManuallyRejected(row) || row.srpPrice === null) return "拒绝补损";
   return `${row.srpPrice}m`;
@@ -145,6 +158,10 @@ function isManuallyRejected(row: Row): boolean {
   return srpOutcome.getReview(row.id)?.reject ?? false;
 }
 
+function isExempted(row: Row): boolean {
+  return srpOutcome.getReview(row.id)?.exemptMIsk !== null;
+}
+
 const ZKB_BASE_URL = new URL("https://zkillboard.com/kill/");
 function redirectZkb(killId: number) {
   const url = new URL(`${killId}/`, ZKB_BASE_URL);
@@ -158,6 +175,10 @@ function needManualApprove(row: Row): boolean {
 
 function canManualReject(row: Row): boolean {
   return !isManuallyRejected(row) && row.srpPrice !== null;
+}
+
+function canExempt(row: Row): boolean {
+  return row.srpPrice === null;
 }
 
 async function onManualApprove(row: Row) {
@@ -177,9 +198,87 @@ async function onManualReject(row: Row) {
 
   await table.value?.refreshAggregateCalcValues();
 }
+
+const showExemptModal = ref(false);
+const exemptMIskModal = ref<number | null>(0);
+const modalInput = useTemplateRef("modal-input");
+
+watch([modalInput, showExemptModal], ([newModalInput, newShow]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  if (newShow && newModalInput !== null) void newModalInput.focus();
+});
+
+async function onExempt(row: Row) {
+  const original = srpOutcome.getReview(row.id)!;
+  const exemptMIsk = await waitForExemptMIsk(original.exemptMIsk);
+  // We have to re-construct a new object to trigger vue's reactivity. The same
+  // doesn't seem to apply to `onManualApprove` and `onManualReject`, for which
+  // the reason is unknown.
+  const review = { ...original, exemptMIsk } satisfies ReviewEntry;
+  srpOutcome.setReview(row.id, review);
+
+  await table.value?.refreshAggregateCalcValues();
+}
+
+async function waitForExemptMIsk(
+  oldValue: number | null,
+): Promise<number | null> {
+  exemptMIskModal.value = oldValue ?? 0;
+  showExemptModal.value = true;
+
+  return new Promise((resolve) => {
+    watch(
+      showExemptModal,
+      (newValue) => {
+        if (!newValue) {
+          resolve(exemptMIskModal.value);
+        }
+      },
+      { once: true },
+    );
+  });
+}
 </script>
 
 <template>
+  <VxeModal
+    v-model="showExemptModal"
+    title="请输入补损金额"
+    width="auto"
+    min-height="auto"
+    :draggable="false"
+    :show-close="false"
+  >
+    <template #default>
+      <VxeNumberInput
+        ref="modal-input"
+        v-model="exemptMIskModal"
+        type="integer"
+        align="right"
+        min="0"
+        plus-icon="vxe-icon-arrow-up"
+        minus-icon="vxe-icon-arrow-down"
+        class-name="mr-4"
+      >
+        <template #suffix>m</template>
+      </VxeNumberInput>
+      <VxeButton
+        content="确认"
+        status="primary"
+        :disabled="exemptMIskModal === null"
+        @click="showExemptModal = false"
+      ></VxeButton>
+      <VxeButton
+        content="撤销"
+        status="error"
+        @click="
+          exemptMIskModal = null;
+          showExemptModal = false;
+        "
+      ></VxeButton>
+    </template>
+  </VxeModal>
+
   <VxeTable
     ref="table"
     border
@@ -277,6 +376,7 @@ async function onManualReject(row: Row) {
           >人工通过</VxeTag
         >
         <VxeTag v-if="isManuallyRejected(row)" status="error">人工拒绝</VxeTag>
+        <!-- <VxeTag v-if="isExempted(row)" status="primary">特例通过</VxeTag> -->
       </template>
     </VxeColumn>
 
@@ -298,14 +398,9 @@ async function onManualReject(row: Row) {
       width="auto"
       align="right"
       header-align="left"
-      :formatter="
-        ({ cellValue }) => {
-          if (cellValue === 1) return '固定金额';
-          if (cellValue === null) return '';
-          return `${cellValue * 100}%`;
-        }
-      "
-    ></VxeColumn>
+    >
+      <template #default="{ row }">{{ formatSrpModifier(row) }}</template>
+    </VxeColumn>
 
     <VxeColumn
       field="srpPrice"
@@ -349,6 +444,11 @@ async function onManualReject(row: Row) {
           :status="!canManualReject(row) ? 'info' : 'error'"
           :disabled="!canManualReject(row)"
           @click="onManualReject(row)"
+        ></VxeButton>
+        <VxeButton
+          content="特例通过"
+          :disabled="!canExempt(row)"
+          @click="onExempt(row)"
         ></VxeButton>
       </template>
       <template #group-values></template>

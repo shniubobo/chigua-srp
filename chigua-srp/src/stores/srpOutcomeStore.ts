@@ -93,7 +93,9 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
           note,
         })) as SrpOutcomeApproveEntry;
         outcomeEntry.killmails.push(dataEntry.killmail);
-        outcomeEntry.mIsks.push(dataEntry.decision.mIskModified!);
+        outcomeEntry.mIsks.push(
+          dataEntry.decision.mIskModified ?? review.exemptMIsk!,
+        );
       } else {
         outcomeEntry = {
           kind,
@@ -117,7 +119,14 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
     inner.notes = new Map();
 
     inner.reviews = new Map(
-      srpData.keys().map((key) => [key, { approve: false, reject: false }]),
+      srpData.keys().map((key) => [
+        key,
+        {
+          approve: false,
+          reject: false,
+          exemptMIsk: null,
+        } satisfies ReviewEntry,
+      ]),
     );
   }
 
@@ -158,9 +167,10 @@ const useSrpOutcomeStoreInner = defineStore("srpOutcomeInner", () => {
   return { srpData, reviews, notes };
 });
 
-function getSrpKind(srpData: SrpDataEntry, review?: ReviewEntry): SrpKind {
-  if (review?.reject) return SrpKind.Reject;
-  if (review?.approve) return SrpKind.Approve;
+function getSrpKind(srpData: SrpDataEntry, review: ReviewEntry): SrpKind {
+  if (review.exemptMIsk !== null) return SrpKind.Approve;
+  if (review.reject) return SrpKind.Reject;
+  if (review.approve) return SrpKind.Approve;
   if (srpData.decision.needReview) return SrpKind.AwaitingReview;
 
   if (srpData.decision.mIskModified === null) return SrpKind.Reject;
