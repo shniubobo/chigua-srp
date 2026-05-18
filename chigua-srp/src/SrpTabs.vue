@@ -7,16 +7,13 @@
       <VxeTabs position="left">
         <VxeTabPane title="KM 信息" name="km-info">
           <template #default>
-            <KmInfoTab
-              v-model:loading="loading"
-              v-model:srp-data="srpData"
-            ></KmInfoTab>
+            <KmInfoTab v-model:loading="loading"></KmInfoTab>
           </template>
         </VxeTabPane>
 
         <VxeTabPane title="补损邮件" name="srp-mail">
           <template #default>
-            <SrpMailTab :loading :srp-data></SrpMailTab>
+            <SrpMailTab :loading></SrpMailTab>
           </template>
         </VxeTabPane>
       </VxeTabs>
@@ -30,10 +27,8 @@ import { VxeTabPane, VxeTabs } from "vxe-pc-ui";
 
 import KmInfoTab from "./KmInfoTab.vue";
 import SrpMailTab from "./SrpMailTab.vue";
-import { type SrpData } from "./srp";
 
 const loading = ref(false);
-const srpData = ref<SrpData>(new Map());
 </script>
 
 <style lang="postcss"></style>

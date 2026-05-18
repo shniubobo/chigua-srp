@@ -109,6 +109,8 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
     return outcome;
   });
 
+  const srpData = computed(() => inner.srpData);
+
   function putSrpData(srpData: SrpData) {
     inner.srpData = srpData;
     inner.reviews = new Map();
@@ -138,7 +140,14 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
     inner.notes.set(outcomeKey, note);
   }
 
-  return { srpOutcome, putSrpData, getReview, setReview, updateNote };
+  return {
+    srpOutcome,
+    srpData,
+    putSrpData,
+    getReview,
+    setReview,
+    updateNote,
+  };
 });
 
 const useSrpOutcomeStoreInner = defineStore("srpOutcomeInner", () => {

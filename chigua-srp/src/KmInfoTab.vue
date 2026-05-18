@@ -27,7 +27,7 @@
     </template>
 
     <template #body>
-      <KmInfoTable :srp-data="srpData" :loading="loading"></KmInfoTable>
+      <KmInfoTable :loading="loading"></KmInfoTable>
     </template>
   </SrpTab>
 </template>
@@ -38,11 +38,13 @@ import { VxeButton, VxeDateRangePicker, VxeSwitch, VxeUI } from "vxe-pc-ui";
 
 import { fetchKillmails } from "./esi";
 import KmInfoTable from "./KmInfoTable.vue";
-import { buildSrpData, type SrpData } from "./srp";
+import { buildSrpData } from "./srp";
 import SrpTab from "./SrpTab.vue";
+import { useSrpOutcomeStore } from "./stores/srpOutcomeStore";
 
 const loading = defineModel<boolean>("loading", { required: true });
-const srpData = defineModel<SrpData>("srp-data", { required: true });
+
+const srpOutcome = useSrpOutcomeStore();
 
 const startDateTimeString = ref("");
 const endDateTimeString = ref("");
@@ -59,7 +61,7 @@ const sinceLastSrp = ref(false);
 
 async function onFetchKillmails() {
   if (startDateTime.value === null || endDateTime.value === null) {
-    await VxeUI.modal.message({
+    void VxeUI.modal.message({
       id: "date-not-picked",
       content: "请先选择日期！",
       status: "error",
@@ -75,7 +77,7 @@ async function onFetchKillmails() {
       endDateTime.value,
       sinceLastSrp.value,
     );
-    srpData.value = await buildSrpData(killmails);
+    srpOutcome.putSrpData(await buildSrpData(killmails));
   } finally {
     loading.value = false;
   }

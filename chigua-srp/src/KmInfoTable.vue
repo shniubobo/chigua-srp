@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, useTemplateRef, watch } from "vue";
+import { computed, reactive, useTemplateRef } from "vue";
 import { VxeButton, VxeTag } from "vxe-pc-ui";
 import {
   VxeColumn,
@@ -7,7 +7,7 @@ import {
   type VxeTableInstance,
   type VxeTablePropTypes,
 } from "vxe-table";
-import { getSrpPayee, type SrpData, type SrpPayee } from "./srp";
+import { getSrpPayee, type SrpPayee } from "./srp";
 import { useSrpOutcomeStore } from "./stores/srpOutcomeStore";
 
 interface Row {
@@ -43,12 +43,13 @@ interface ShipName {
 
 const props = defineProps<{
   loading: boolean;
-  srpData: SrpData;
 }>();
+
+const srpOutcome = useSrpOutcomeStore();
 
 const rows = computed<Row[]>(() =>
   Array.from(
-    props.srpData
+    srpOutcome.srpData
       .entries()
       .map(([id, { killmail, decision, decisionContext: context }]) => ({
         id: id,
@@ -75,13 +76,6 @@ const rows = computed<Row[]>(() =>
         srpPayee: getSrpPayee({ killmail, decision, decisionContext: context }),
       })),
   ),
-);
-
-const srpOutcome = useSrpOutcomeStore();
-watch(
-  () => props.srpData,
-  () => srpOutcome.putSrpData(props.srpData),
-  { deep: true },
 );
 
 const table = useTemplateRef<VxeTableInstance>("table");
@@ -195,7 +189,7 @@ async function onManualReject(row: Row) {
     auto-resize
     empty-text="无 KM 数据，请先拉取"
     :loading="props.loading"
-    :show-header="srpData.size > 0"
+    :show-header="srpOutcome.srpData.size > 0"
     :row-config="{ isHover: true, keyField: 'id' }"
     :data="rows"
     :span-method="spanMethod"

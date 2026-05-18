@@ -80,7 +80,7 @@ import SrpTab from "./SrpTab.vue";
 import { ErrorMessage } from "./error";
 import { sendMail, type Killmail } from "./esi";
 import { getShipNames } from "./sde";
-import { type SrpData, type SrpPayee } from "./srp";
+import { type SrpPayee } from "./srp";
 import {
   SrpKind,
   useSrpOutcomeStore,
@@ -90,7 +90,6 @@ import {
 
 const props = defineProps<{
   loading: boolean;
-  srpData: SrpData;
 }>();
 
 const rows = ref<Row[]>([]);
