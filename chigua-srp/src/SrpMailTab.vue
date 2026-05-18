@@ -55,17 +55,21 @@
         <VxeColumn
           field="notes"
           title="备注"
-          :edit-render="{
-            name: 'VxeInput',
-            props: {
-              clearable: true,
-              trim: true,
-              disabled: isAwaitingReview(),
-              placeholder: isAwaitingReview() ? '有 KM 待审核' : '请输入',
-            },
-          }"
           :title-suffix="{ icon: 'vxe-icon-edit' }"
-        ></VxeColumn>
+          :edit-render="{ autoFocus: true }"
+        >
+          <template #default="{ row }">{{ row.note }}</template>
+          <template #edit="{ row }">
+            <VxeInput
+              v-model="row.note"
+              trim
+              clearable
+              :disabled="isAwaitingReview()"
+              :placeholder="isAwaitingReview() ? '有 KM 待审核' : '请输入'"
+              @lazy-change="onNoteInput(row)"
+            ></VxeInput>
+          </template>
+        </VxeColumn>
       </VxeTable>
     </template>
   </SrpTab>
@@ -73,7 +77,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { VxeButton } from "vxe-pc-ui";
+import { VxeButton, VxeInput } from "vxe-pc-ui";
 import { VxeColumn, VxeTable } from "vxe-table";
 
 import SrpTab from "./SrpTab.vue";
@@ -114,6 +118,10 @@ watch(
     immediate: true,
   },
 );
+
+function onNoteInput(row: Row) {
+  srpOutcome.updateNote(row.key, row.note);
+}
 
 function isAwaitingReview(): boolean {
   return (

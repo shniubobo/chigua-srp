@@ -140,12 +140,7 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
     inner.reviews.set(dataKey, review);
   }
 
-  function updateNote(dataKey: string, note: string) {
-    const dataEntry = inner.srpData.get(dataKey)!;
-    const review = inner.reviews.get(dataKey)!;
-    const kind = getSrpKind(dataEntry, review);
-
-    const outcomeKey = buildOutcomeKey(inner.srpData.get(dataKey)!, kind);
+  function updateNote(outcomeKey: SrpOutcomeKey, note: string) {
     inner.notes.set(outcomeKey, note);
   }
 
