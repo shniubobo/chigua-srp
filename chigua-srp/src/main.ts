@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import {
   VxeDatePanel,
   VxeIcon,
+  VxeInput,
   VxeLoading,
   VxeModal,
   VxeTooltip,
@@ -25,6 +26,7 @@ VxeUI.setLanguage("zh-CN");
 
 VxeUI.component(VxeDatePanel);
 VxeUI.component(VxeIcon);
+VxeUI.component(VxeInput);
 VxeUI.component(VxeLoading);
 VxeUI.component(VxeModal);
 VxeUI.component(VxeTooltip);
