@@ -1,3 +1,4 @@
+import { createPinia } from "pinia";
 import { createApp } from "vue";
 import {
   VxeDatePanel,
@@ -30,6 +31,7 @@ VxeUI.component(VxeTooltip);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App);
+app.use(createPinia());
 app.config.errorHandler = (err, _instance, info) => {
   console.error(`info = ${info}`);
   void VxeUI.modal.message({

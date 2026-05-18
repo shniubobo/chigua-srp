@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, useTemplateRef } from "vue";
+import { computed, reactive, useTemplateRef, watch } from "vue";
 import { VxeButton, VxeTag } from "vxe-pc-ui";
 import {
   VxeColumn,
@@ -7,7 +7,8 @@ import {
   type VxeTableInstance,
   type VxeTablePropTypes,
 } from "vxe-table";
-import { getSrpPayee, type Reviews, type SrpData, type SrpPayee } from "./srp";
+import { getSrpPayee, type SrpData, type SrpPayee } from "./srp";
+import { useSrpOutcomeStore } from "./stores/srpOutcomeStore";
 
 interface Row {
   id: string;
@@ -45,8 +46,6 @@ const props = defineProps<{
   srpData: SrpData;
 }>();
 
-const reviews = defineModel<Reviews>("reviews", { required: true });
-
 const rows = computed<Row[]>(() =>
   Array.from(
     props.srpData
@@ -76,6 +75,13 @@ const rows = computed<Row[]>(() =>
         srpPayee: getSrpPayee({ killmail, decision, decisionContext: context }),
       })),
   ),
+);
+
+const srpOutcome = useSrpOutcomeStore();
+watch(
+  () => props.srpData,
+  () => srpOutcome.putSrpData(props.srpData),
+  { deep: true },
 );
 
 const table = useTemplateRef<VxeTableInstance>("table");
@@ -138,11 +144,11 @@ function isAwaitingReview(row: Row): boolean {
 }
 
 function isManuallyApproved(row: Row): boolean {
-  return reviews.value.get(row.id)?.approve ?? false;
+  return srpOutcome.getReview(row.id)?.approve ?? false;
 }
 
 function isManuallyRejected(row: Row): boolean {
-  return reviews.value.get(row.id)?.reject ?? false;
+  return srpOutcome.getReview(row.id)?.reject ?? false;
 }
 
 const ZKB_BASE_URL = new URL("https://zkillboard.com/kill/");
@@ -161,19 +167,19 @@ function canManualReject(row: Row): boolean {
 }
 
 async function onManualApprove(row: Row) {
-  const entry = reviews.value.get(row.id)!;
+  const entry = srpOutcome.getReview(row.id)!;
   if (row.tags.needReview) entry.approve = true;
   entry.reject = false;
-  reviews.value.set(row.id, entry);
+  srpOutcome.setReview(row.id, entry);
 
   await table.value?.refreshAggregateCalcValues();
 }
 
 async function onManualReject(row: Row) {
-  const entry = reviews.value.get(row.id)!;
+  const entry = srpOutcome.getReview(row.id)!;
   entry.reject = true;
   entry.approve = false;
-  reviews.value.set(row.id, entry);
+  srpOutcome.setReview(row.id, entry);
 
   await table.value?.refreshAggregateCalcValues();
 }

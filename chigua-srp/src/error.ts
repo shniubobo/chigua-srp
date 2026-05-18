@@ -6,6 +6,7 @@ export const enum ErrorMessage {
   MalformedPriceHistory = "Malformed price history.",
   NotLoggedIn = "Not logged in to ESI.",
   NotSubscribed = "Not subscribed to target mailing list.",
+  SrpDataKeyNotFound = "Attempted to update `SrpOutcome` with a non-existent `SrpData` key.",
 }
 
 export function throwOnStatus(status: number) {

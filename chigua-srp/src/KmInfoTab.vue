@@ -27,11 +27,7 @@
     </template>
 
     <template #body>
-      <KmInfoTable
-        v-model:reviews="reviews"
-        :srp-data="srpData"
-        :loading="loading"
-      ></KmInfoTable>
+      <KmInfoTable :srp-data="srpData" :loading="loading"></KmInfoTable>
     </template>
   </SrpTab>
 </template>
@@ -42,12 +38,11 @@ import { VxeButton, VxeDateRangePicker, VxeSwitch, VxeUI } from "vxe-pc-ui";
 
 import { fetchKillmails } from "./esi";
 import KmInfoTable from "./KmInfoTable.vue";
-import { buildSrpData, type Reviews, type SrpData } from "./srp";
+import { buildSrpData, type SrpData } from "./srp";
 import SrpTab from "./SrpTab.vue";
 
 const loading = defineModel<boolean>("loading", { required: true });
 const srpData = defineModel<SrpData>("srp-data", { required: true });
-const reviews = defineModel<Reviews>("reviews", { required: true });
 
 const startDateTimeString = ref("");
 const endDateTimeString = ref("");

@@ -10,14 +10,13 @@
             <KmInfoTab
               v-model:loading="loading"
               v-model:srp-data="srpData"
-              v-model:reviews="reviews"
             ></KmInfoTab>
           </template>
         </VxeTabPane>
 
         <VxeTabPane title="补损邮件" name="srp-mail">
           <template #default>
-            <SrpMailTab :loading :srp-data :reviews></SrpMailTab>
+            <SrpMailTab :loading :srp-data></SrpMailTab>
           </template>
         </VxeTabPane>
       </VxeTabs>
@@ -26,23 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { VxeTabPane, VxeTabs } from "vxe-pc-ui";
 
 import KmInfoTab from "./KmInfoTab.vue";
 import SrpMailTab from "./SrpMailTab.vue";
-import { type Reviews, type SrpData } from "./srp";
+import { type SrpData } from "./srp";
 
 const loading = ref(false);
 const srpData = ref<SrpData>(new Map());
-const reviews = ref<Reviews>(new Map());
-
-watch(srpData, (srpData) => {
-  reviews.value.clear();
-  srpData.keys().forEach((id) => {
-    reviews.value.set(id, { approve: false, reject: false });
-  });
-});
 </script>
 
 <style lang="postcss"></style>

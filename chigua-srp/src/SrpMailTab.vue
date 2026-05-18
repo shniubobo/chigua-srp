@@ -42,7 +42,7 @@
           header-align="left"
           :formatter="
             ({ cellValue }) => {
-              if (cellValue.length === 0) return '';
+              if (cellValue === undefined) return '';
               const sum = (cellValue as number[]).reduce(
                 (sum, mIsk) => sum + mIsk,
                 0,
@@ -80,134 +80,42 @@ import SrpTab from "./SrpTab.vue";
 import { ErrorMessage } from "./error";
 import { sendMail, type Killmail } from "./esi";
 import { getShipNames } from "./sde";
+import { type SrpData, type SrpPayee } from "./srp";
 import {
-  getSrpPayee,
-  type ReviewEntry,
-  type Reviews,
-  type SrpData,
-  type SrpDataEntry,
-  type SrpPayee,
-} from "./srp";
+  SrpKind,
+  useSrpOutcomeStore,
+  type SrpOutcomeEntry,
+  type SrpOutcomeKey,
+} from "./stores/srpOutcomeStore";
 
 const props = defineProps<{
   loading: boolean;
   srpData: SrpData;
-  reviews: Reviews;
 }>();
 
-const enum SrpKind {
-  Reject = "拒绝",
-  Approve = "通过",
-  AwaitingReview = "等待审核",
-}
-
-type SrpDataWithReview = SrpDataEntry & ReviewEntry;
-
 const rows = ref<Row[]>([]);
-type Row = (RowCommon & RowApprove) | (RowCommon & RowOther);
-interface RowCommon {
-  key: string;
-  payee: SrpPayee;
-  notes: string;
-  mIsks: number[];
-}
-interface RowApprove {
-  kind: SrpKind.Approve;
-  killmails: Killmail[];
-}
-interface RowOther {
-  kind: SrpKind.AwaitingReview | SrpKind.Reject;
-  killmail: Killmail;
-}
+type Row = { key: SrpOutcomeKey } & SrpOutcomeEntry;
 type ApprovedRow = Row & { kind: SrpKind.Approve };
 type RejectedRow = Row & { kind: SrpKind.Reject };
 
-// TODO: Make this more readable.
+const srpOutcome = useSrpOutcomeStore();
 watch(
-  [props.srpData, props.reviews],
+  () => srpOutcome.srpOutcome,
   () => {
-    // This need to be iterated twice, so we have to make it an array.
-    const srpDataWithReview = Array.from(
-      props.srpData
+    console.log("triggered");
+    rows.value = Array.from(
+      srpOutcome.srpOutcome
         .entries()
-        .map(([id, entry]) => ({ ...entry, ...props.reviews.get(id)! })),
+        .map(([key, value]) => ({ key, ...value })),
     );
-
-    const byPayee = Object.groupBy(
-      srpDataWithReview,
-      (entry) => getSrpPayee(entry).name,
-    ) as Record<string, SrpDataWithReview[]>;
-
-    const byPayeeByKind = Object.fromEntries(
-      Object.entries(byPayee).map(([payee, entries]) => [
-        payee,
-        Object.groupBy(entries, (entry) => getSrpKind(entry)) as Record<
-          SrpKind,
-          SrpDataWithReview[]
-        >,
-      ]),
-    );
-
-    const payeeNameToId = Object.fromEntries(
-      srpDataWithReview
-        .map(getSrpPayee)
-        .map(({ name, id }) => [name, id] as [string, number]),
-    );
-
-    rows.value = [];
-    for (const [payeeName, byKind] of Object.entries(byPayeeByKind)) {
-      for (const [kind, entries] of Object.entries(byKind)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-        if (kind === SrpKind.Approve) {
-          // Aggregate all approved KMs for each payee.
-          rows.value.push({
-            key: `${payeeName}-${kind}`,
-            kind: kind,
-            payee: {
-              name: payeeName,
-              id: payeeNameToId[payeeName]!,
-            },
-            mIsks: entries.map((entry) => entry.decision.mIskModified!),
-            notes: "",
-            killmails: entries.map((entry) => entry.killmail),
-          });
-          continue;
-        }
-
-        for (const entry of entries) {
-          const killmailId = entry.killmail.pointer.id;
-          const reportDate = entry.killmail.pointer.report.date?.valueOf() ?? 0;
-          rows.value.push({
-            key: `${payeeName}-${kind}-${killmailId}-${reportDate}`,
-            kind: kind as SrpKind.Reject | SrpKind.AwaitingReview,
-            payee: {
-              name: payeeName,
-              id: payeeNameToId[payeeName]!,
-            },
-            mIsks: [],
-            notes: "",
-            killmail: entry.killmail,
-          });
-        }
-      }
-    }
   },
   {
     deep: true,
-    // This tab is lazily mounted. We need to trigger this watcher
-    // upon mounting this tab.
+    // This tab is lazily mounted. We need to trigger this watcher upon
+    // mounting.
     immediate: true,
   },
 );
-
-function getSrpKind(entry: SrpDataWithReview): SrpKind {
-  if (entry.reject) return SrpKind.Reject;
-  if (entry.approve) return SrpKind.Approve;
-  if (entry.decision.needReview) return SrpKind.AwaitingReview;
-
-  if (entry.decision.mIskModified === null) return SrpKind.Reject;
-  return SrpKind.Approve;
-}
 
 function isAwaitingReview(): boolean {
   return (
@@ -260,7 +168,7 @@ class MailComposer {
     if (row.kind === SrpKind.AwaitingReview)
       throw new Error(ErrorMessage.AwaitingReview);
     if (row.kind === SrpKind.Approve) return this.approve(row);
-    return this.reject(row as RejectedRow);
+    return this.reject(row);
   }
 
   public finish(): string[] {
@@ -274,14 +182,14 @@ class MailComposer {
     this.payeeLink(row.payee);
     row.killmails.forEach((killmail) => this.killMailLink(killmail));
 
-    return this.priceSum(row).notes(row).emptyLine().flushBuffer();
+    return this.priceSum(row).note(row).emptyLine().flushBuffer();
   }
 
   private reject(row: RejectedRow): MailComposer {
     return this.payeeLink(row.payee)
       .killMailLink(row.killmail)
       .text("拒绝补损")
-      .notes(row)
+      .note(row)
       .emptyLine()
       .flushBuffer();
   }
@@ -293,8 +201,8 @@ class MailComposer {
     return this.text(`${row.mIsks.join("+")}=${sum}m`);
   }
 
-  private notes(row: Row): MailComposer {
-    if (row.notes) return this.text(` (${row.notes})`);
+  private note(row: Row): MailComposer {
+    if (row.note) return this.text(` (${row.note})`);
     return this;
   }
 

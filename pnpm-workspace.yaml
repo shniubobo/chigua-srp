@@ -5,14 +5,15 @@ allowBuilds:
   "@parcel/watcher": true
 catalog:
   "@cloudflare/vite-plugin": ^1.36.3
-  '@cloudflare/vitest-pool-workers': ^0.16.3
+  "@cloudflare/vitest-pool-workers": ^0.16.3
   "@eslint/js": ^10.0.1
   "@types/node": ^24.12.2
-  '@vitest/eslint-plugin': ^1.6.17
+  "@vitest/eslint-plugin": ^1.6.17
   cookie: ^1.1.1
   eslint: ^10.2.0
   eslint-config-prettier: ^10.1.8
   globals: ^17.5.0
+  pinia: ^3.0.4
   prettier: 3.8.1
   typescript: ~6.0.2
   typescript-eslint: ^8.59.1
