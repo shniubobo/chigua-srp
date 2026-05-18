@@ -23,6 +23,7 @@ const CHIGUA_FC_IDS = [
   2122946394, // Heite Xiao
   2113321478, // Nishikinomaki Ms
   2115444624, // Nine -L
+  2122012874, // NGEX5
 ];
 
 const LOGISTICS = 437;

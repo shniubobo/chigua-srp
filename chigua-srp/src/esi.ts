@@ -25,6 +25,7 @@ const COOKIE_MAX_AGE = 1 * 60 * 60; // One hour
 const MAIL_LIST_NAME = "CHIGUA SRP";
 const SRP_OFFICER_CHARACTER_IDS = [
   2113450798, // peter li peter
+  2113799332, // Cygnus Wall
 ];
 const SRP_OFFICER_MAIL_KEYWORD = "已补";
 
