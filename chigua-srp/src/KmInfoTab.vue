@@ -57,7 +57,7 @@ const endDateTime = computed(() => {
   return new Date(endDateTimeString.value);
 });
 
-const sinceLastSrp = ref(false);
+const sinceLastSrp = ref(true);
 
 async function onFetchKillmails() {
   if (startDateTime.value === null || endDateTime.value === null) {
