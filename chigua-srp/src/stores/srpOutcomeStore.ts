@@ -39,23 +39,23 @@ interface SrpOutcomeCommonEntry {
   note: string;
 }
 
-type SrpOutcomeApproveKey = `${SrpOutcomeKeyPrefix}${SrpKind.Approve}`;
-interface SrpOutcomeApproveEntry extends SrpOutcomeCommonEntry {
+export type SrpOutcomeApproveKey = `${SrpOutcomeKeyPrefix}${SrpKind.Approve}`;
+export interface SrpOutcomeApproveEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.Approve;
   killmails: Killmail[];
   mIsks: number[];
 }
 
-type SrpOutcomeRejectKey =
+export type SrpOutcomeRejectKey =
   `${SrpOutcomeKeyPrefix}${SrpKind.Reject}${SrpOutcomeKeyPostfix}`;
-interface SrpOutcomeRejectEntry extends SrpOutcomeCommonEntry {
+export interface SrpOutcomeRejectEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.Reject;
   killmail: Killmail;
 }
 
-type SrpOutcomeAwaitingReviewKey =
+export type SrpOutcomeAwaitingReviewKey =
   `${SrpOutcomeKeyPrefix}${SrpKind.AwaitingReview}${SrpOutcomeKeyPostfix}`;
-interface SrpOutcomeAwaitingReviewEntry extends SrpOutcomeCommonEntry {
+export interface SrpOutcomeAwaitingReviewEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.AwaitingReview;
   killmail: Killmail;
 }

@@ -16,6 +16,12 @@
             <SrpMailTab :loading></SrpMailTab>
           </template>
         </VxeTabPane>
+
+        <VxeTabPane title="转账信息" name="payment">
+          <template #default>
+            <PaymentTab :loading></PaymentTab>
+          </template>
+        </VxeTabPane>
       </VxeTabs>
     </div>
   </div>
@@ -26,9 +32,8 @@ import { ref } from "vue";
 import { VxeTabPane, VxeTabs } from "vxe-pc-ui";
 
 import KmInfoTab from "./KmInfoTab.vue";
+import PaymentTab from "./PaymentTab.vue";
 import SrpMailTab from "./SrpMailTab.vue";
 
 const loading = ref(false);
 </script>
-
-<style lang="postcss"></style>
