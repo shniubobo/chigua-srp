@@ -56,6 +56,12 @@ import {
   type SrpOutcomeApproveKey,
 } from "./stores/srpOutcomeStore";
 
+const PREFIX = "SRP: ";
+const SUFFIX = " +";
+const OVERHEAD = `${PREFIX}${SUFFIX}`.length;
+const LIMIT = 40;
+const DELIMITER = ", ";
+
 const props = defineProps<{
   loading: boolean;
 }>();
@@ -96,12 +102,6 @@ watch(
     immediate: true,
   },
 );
-
-const PREFIX = "SRP: ";
-const SUFFIX = " +";
-const OVERHEAD = `${PREFIX}${SUFFIX}`.length;
-const LIMIT = 40;
-const DELIMITER = ", ";
 
 function buildReason(srpOutcome: SrpOutcomeApproveEntry): string {
   let isSuffixNeeded = false;
