@@ -15,12 +15,35 @@
         @cell-click="onCellClick"
       >
         <VxeColumn
+          field="marked"
+          title="标记"
+          width="auto"
+          align="center"
+          class-name="cursor-pointer"
+        >
+          <template #default="{ row }">
+            <div>
+              {{ row.marked ? "✅" : "⬛" }}
+            </div>
+          </template>
+        </VxeColumn>
+
+        <VxeColumn
           field="payeeName"
           title="收款人"
           width="250"
           show-overflow="tooltip"
-          class-name="cursor-pointer"
-        ></VxeColumn>
+        >
+          <template #default="{ row }">
+            <div
+              :class="
+                row.marked ? 'text-neutral-400 line-through' : 'cursor-pointer'
+              "
+            >
+              {{ row.payeeName }}
+            </div>
+          </template>
+        </VxeColumn>
 
         <VxeColumn
           field="mIsk"
@@ -28,16 +51,29 @@
           width="auto"
           align="right"
           header-align="left"
-          :formatter="({ cellValue }) => `${cellValue}m`"
-          class-name="cursor-pointer"
-        ></VxeColumn>
+        >
+          <template #default="{ row }">
+            <div
+              :class="
+                row.marked ? 'text-neutral-400 line-through' : 'cursor-pointer'
+              "
+            >
+              {{ row.mIsk }}m
+            </div>
+          </template>
+        </VxeColumn>
 
-        <VxeColumn
-          field="reason"
-          title="转账理由"
-          min-width="auto"
-          class-name="cursor-pointer"
-        ></VxeColumn>
+        <VxeColumn field="reason" title="转账理由" min-width="auto">
+          <template #default="{ row }">
+            <div
+              :class="
+                row.marked ? 'text-neutral-400 line-through' : 'cursor-pointer'
+              "
+            >
+              {{ row.reason }}
+            </div>
+          </template>
+        </VxeColumn>
       </VxeTable>
     </template>
   </SrpTab>
@@ -73,6 +109,7 @@ interface Row {
   mIsk: number;
   reason: string;
   killmails: Killmail[];
+  marked: boolean;
 }
 
 const srpOutcome = useSrpOutcomeStore();
@@ -92,6 +129,7 @@ watch(
         mIsk: value.mIsks.reduce((sum, current) => sum + current),
         reason: buildReason(value),
         killmails: value.killmails,
+        marked: false,
       })),
     );
   },
@@ -145,7 +183,15 @@ const MILLION = 1_000_000;
 const onCellClick: VxeTableEvents.CellClick<Row> = ({ row, column }) => {
   const field = column.field as keyof Omit<Row, "killmails">;
   let cellValue = row[field];
+
+  if (field === "marked") {
+    row.marked = !row.marked;
+    return;
+  }
   if (field === "mIsk") cellValue = (cellValue as number) * MILLION;
+
+  if (row.marked) return;
+
   void navigator.clipboard.writeText(cellValue.toString());
   void VxeUI.modal.message({
     id: "copied",
