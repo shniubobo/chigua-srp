@@ -94,7 +94,7 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
         })) as SrpOutcomeApproveEntry;
         outcomeEntry.killmails.push(dataEntry.killmail);
         outcomeEntry.mIsks.push(
-          dataEntry.decision.mIskModified ?? review.exemptMIsk!,
+          review.exemptMIsk ?? dataEntry.decision.mIskModified!,
         );
       } else {
         outcomeEntry = {

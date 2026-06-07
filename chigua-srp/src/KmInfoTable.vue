@@ -112,7 +112,7 @@ const aggregateConfig = reactive<VxeTablePropTypes.AggregateConfig<Row>>({
         )
         .map(
           (child) =>
-            child.srpPrice ?? srpOutcome.getReview(child.id)!.exemptMIsk!,
+            srpOutcome.getReview(child.id)!.exemptMIsk ?? child.srpPrice!,
         )
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return 0;
@@ -131,7 +131,7 @@ function formatDateEt(
 }
 
 function formatSrpModifier(row: Row): string {
-  if (isExempted(row)) return "特例通过";
+  if (isExempted(row)) return "手动";
   if (row.srpModifier === 1) return "固定金额";
   if (row.srpModifier === null) return "";
   return `${row.srpModifier * 100}%`;
@@ -175,10 +175,6 @@ function needManualApprove(row: Row): boolean {
 
 function canManualReject(row: Row): boolean {
   return !isManuallyRejected(row) && row.srpPrice !== null;
-}
-
-function canExempt(row: Row): boolean {
-  return row.srpPrice === null;
 }
 
 async function onManualApprove(row: Row) {
@@ -243,7 +239,7 @@ async function waitForExemptMIsk(
 <template>
   <VxeModal
     v-model="showExemptModal"
-    title="请输入补损金额"
+    title="请输入补损金额（优先于通过、拒绝按钮）"
     width="auto"
     min-height="auto"
     :draggable="false"
@@ -445,11 +441,7 @@ async function waitForExemptMIsk(
           :disabled="!canManualReject(row)"
           @click="onManualReject(row)"
         ></VxeButton>
-        <VxeButton
-          content="特例通过"
-          :disabled="!canExempt(row)"
-          @click="onExempt(row)"
-        ></VxeButton>
+        <VxeButton content="手动" @click="onExempt(row)"></VxeButton>
       </template>
       <template #group-values></template>
     </VxeColumn>
