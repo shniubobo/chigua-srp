@@ -22,6 +22,12 @@
             <PaymentTab :loading></PaymentTab>
           </template>
         </VxeTabPane>
+
+        <VxeTabPane title="数据导出" name="export">
+          <template #default>
+            <ExportTab :loading></ExportTab>
+          </template>
+        </VxeTabPane>
       </VxeTabs>
     </div>
   </div>
@@ -31,6 +37,7 @@
 import { ref } from "vue";
 import { VxeTabPane, VxeTabs } from "vxe-pc-ui";
 
+import ExportTab from "./ExportTab.vue";
 import KmInfoTab from "./KmInfoTab.vue";
 import PaymentTab from "./PaymentTab.vue";
 import SrpMailTab from "./SrpMailTab.vue";

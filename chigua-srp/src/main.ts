@@ -7,6 +7,7 @@ import {
   VxeModal,
   VxeTooltip,
   VxeUI,
+  VxeUpload,
 } from "vxe-pc-ui";
 import zhCN from "vxe-pc-ui/lib/language/zh-CN";
 
@@ -28,6 +29,7 @@ VxeUI.component(VxeIcon);
 VxeUI.component(VxeLoading);
 VxeUI.component(VxeModal);
 VxeUI.component(VxeTooltip);
+VxeUI.component(VxeUpload);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App);

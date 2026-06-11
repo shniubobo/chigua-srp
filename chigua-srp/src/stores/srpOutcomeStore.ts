@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 import { ErrorMessage } from "@/error";
 import type { Killmail } from "@/esi";
 import {
+  DecisionContext,
   getSrpPayee,
   type ReviewEntry,
   type Reviews,
@@ -44,6 +45,7 @@ export interface SrpOutcomeApproveEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.Approve;
   killmails: Killmail[];
   mIsks: number[];
+  contexts: DecisionContext[];
 }
 
 export type SrpOutcomeRejectKey =
@@ -51,6 +53,7 @@ export type SrpOutcomeRejectKey =
 export interface SrpOutcomeRejectEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.Reject;
   killmail: Killmail;
+  context: DecisionContext;
 }
 
 export type SrpOutcomeAwaitingReviewKey =
@@ -58,6 +61,7 @@ export type SrpOutcomeAwaitingReviewKey =
 export interface SrpOutcomeAwaitingReviewEntry extends SrpOutcomeCommonEntry {
   kind: SrpKind.AwaitingReview;
   killmail: Killmail;
+  context: DecisionContext;
 }
 
 export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
@@ -81,6 +85,7 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
       const outcomeKey = buildOutcomeKey(dataEntry, kind);
       const payee = getSrpPayee(dataEntry);
       const note = inner.notes.get(outcomeKey) ?? "";
+      const context = dataEntry.decisionContext;
 
       let outcomeEntry: SrpOutcomeEntry;
       if (kind === SrpKind.Approve) {
@@ -91,17 +96,20 @@ export const useSrpOutcomeStore = defineStore("srpOutcome", () => {
           killmails: [],
           mIsks: [],
           note,
+          contexts: [],
         })) as SrpOutcomeApproveEntry;
         outcomeEntry.killmails.push(dataEntry.killmail);
         outcomeEntry.mIsks.push(
           review.exemptMIsk ?? dataEntry.decision.mIskModified!,
         );
+        outcomeEntry.contexts.push(context);
       } else {
         outcomeEntry = {
           kind,
           payee,
           killmail: dataEntry.killmail,
           note,
+          context,
         };
       }
 
