@@ -2667,5 +2667,54 @@
       1361,
       4
     ]
+  },
+  "3853": {
+    "nameEn": "Command Carriers",
+    "nameZh": "指挥航母",
+    "ancestors": [
+      3853,
+      1381,
+      4
+    ]
+  },
+  "3856": {
+    "nameEn": "Amarr",
+    "nameZh": "艾玛",
+    "ancestors": [
+      3856,
+      3853,
+      1381,
+      4
+    ]
+  },
+  "3859": {
+    "nameEn": "Caldari",
+    "nameZh": "加达里",
+    "ancestors": [
+      3859,
+      3853,
+      1381,
+      4
+    ]
+  },
+  "3861": {
+    "nameEn": "Gallente",
+    "nameZh": "盖伦特",
+    "ancestors": [
+      3861,
+      3853,
+      1381,
+      4
+    ]
+  },
+  "3863": {
+    "nameEn": "Minmatar",
+    "nameZh": "米玛塔尔",
+    "ancestors": [
+      3863,
+      3853,
+      1381,
+      4
+    ]
   }
 }

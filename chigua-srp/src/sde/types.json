@@ -2074,6 +2074,26 @@
     "nameZh": "坚毅者级",
     "marketGroup": 2350
   },
+  "91775": {
+    "nameEn": "Dragoon Navy Issue",
+    "nameZh": "龙骑兵级海军型",
+    "marketGroup": 3765
+  },
+  "91849": {
+    "nameEn": "Algos Navy Issue",
+    "nameZh": "阿尔格斯级海军型",
+    "marketGroup": 3767
+  },
+  "91857": {
+    "nameEn": "Corax Navy Issue",
+    "nameZh": "渡鸦级海军型",
+    "marketGroup": 3766
+  },
+  "91858": {
+    "nameEn": "Talwar Fleet Issue",
+    "nameZh": "弯刀级舰队型",
+    "marketGroup": 3768
+  },
   "92282": {
     "nameEn": "Tenzin YC128 Campaign Bus",
     "nameZh": "YC128年丹增竞选巴士",
@@ -2088,5 +2108,25 @@
     "nameEn": "Roden YC128 Campaign Bus",
     "nameZh": "YC128年莱登竞选巴士",
     "marketGroup": 1699
+  },
+  "92822": {
+    "nameEn": "Salvation",
+    "nameZh": "救赎级",
+    "marketGroup": 3856
+  },
+  "92823": {
+    "nameEn": "Simurgh",
+    "nameZh": "西莫夫级",
+    "marketGroup": 3859
+  },
+  "92824": {
+    "nameEn": "Gaia",
+    "nameZh": "盖亚级",
+    "marketGroup": 3861
+  },
+  "92825": {
+    "nameEn": "Ymir",
+    "nameZh": "伊米尔级",
+    "marketGroup": 3863
   }
 }
