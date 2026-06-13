@@ -64,8 +64,8 @@ const DEFAULT_MODIFIER = 0.85;
 const FIXED_ISK_BASE = new Map([
   [INTERDICTORS, 60_000_000],
   [INTERCEPTORS, 30_000_000],
-  [SHIPS, 15_000_000],
 ]);
+const DEFAULT_ISK_BASE = 15_000_000;
 
 export class Decision<T extends DecisionKind> {
   constructor(
@@ -340,14 +340,15 @@ async function makeDecision(
       context,
     ];
   }
-  return [
-    new Decision<Approve>(
-      getFixedIskBase(killmail),
-      1,
-      isBcOrGreater(killmail),
-    ),
-    context,
-  ];
+
+  const fixedIskBase = getFixedIskBase(killmail);
+  if (fixedIskBase !== null)
+    return [new Decision<Approve>(fixedIskBase, 1), context];
+
+  const trueIskBase = await fetchIskBase(killmail);
+  if (trueIskBase < DEFAULT_ISK_BASE)
+    return [new Decision<Approve>(trueIskBase, DEFAULT_MODIFIER), context];
+  return [new Decision<Approve>(DEFAULT_ISK_BASE, 1), context];
 }
 
 function isShip(killmail: Killmail): boolean {
@@ -392,11 +393,13 @@ function getModifier(killmail: Killmail): number {
   return specialModifier ?? DEFAULT_MODIFIER;
 }
 
-function getFixedIskBase(killmail: Killmail): number {
+function getFixedIskBase(killmail: Killmail): number | null {
   const shipTypeId = killmail.killmail.victim.ship_type_id;
-  return FIXED_ISK_BASE.entries().find(([marketGroupId, _]) =>
-    isTypeInMarketGroups(shipTypeId, [marketGroupId]),
-  )?.[1] as number; // We should always be able to find one
+  return (
+    FIXED_ISK_BASE.entries().find(([marketGroupId, _]) =>
+      isTypeInMarketGroups(shipTypeId, [marketGroupId]),
+    )?.[1] ?? null
+  );
 }
 
 export interface SrpPayee {
