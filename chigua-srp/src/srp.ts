@@ -119,7 +119,7 @@ export class DecisionContext {
       killmail.killmail.victim.character_id,
     );
     const victimName = victim.detail.name;
-    const victimIsChiGua = isChiGua(victim);
+    const victimIsChiGua = isChiGua(killmail);
 
     const issuerId = killmail.pointer.report.issuerId;
     let issuerName = "";
@@ -356,8 +356,8 @@ function isShip(killmail: Killmail): boolean {
   return isTypeInMarketGroups(victimTypeId, [SHIPS]);
 }
 
-function isChiGua(character: Character): boolean {
-  return CHIGUA_CORP_IDS.includes(character.detail.corporation_id);
+function isChiGua(killmail: Killmail): boolean {
+  return CHIGUA_CORP_IDS.includes(killmail.killmail.victim.corporation_id);
 }
 
 function isChiGuaFc(character: Character): boolean {
