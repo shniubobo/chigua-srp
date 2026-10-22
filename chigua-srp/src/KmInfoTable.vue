@@ -8,7 +8,12 @@ import {
   type VxeTablePropTypes,
 } from "vxe-table";
 
-import { getSrpPayee, type ReviewEntry, type SrpPayee } from "./srp";
+import {
+  getSrpPayee,
+  MAIL_SUBJECT_KIND,
+  type ReviewEntry,
+  type SrpPayee,
+} from "./srp";
 import { useSrpOutcomeStore } from "./stores/srpOutcomeStore";
 
 interface Row {
@@ -17,7 +22,7 @@ interface Row {
   issuerName: string;
   killTime: Date;
   reportTime?: Date;
-  mailSubject?: string;
+  mailSubjectKind?: MAIL_SUBJECT_KIND;
   mailBody?: string;
   tags: Tags;
   shipName: ShipName;
@@ -58,7 +63,7 @@ const rows = computed<Row[]>(() =>
         issuerName: context.issuerName,
         killTime: new Date(killmail.killmail.killmail_time),
         reportTime: killmail.pointer.report.date,
-        mailSubject: killmail.pointer.report.subject,
+        mailSubjectKind: context.mailSubjectKind,
         mailBody: killmail.pointer.report.bodyPlainText,
         tags: {
           victimIsChiGua: context.victimIsChiGua,
@@ -330,8 +335,8 @@ async function waitForExemptMIsk(
     ></VxeColumn>
 
     <VxeColumn
-      field="mailSubject"
-      title="邮件标题"
+      field="mailSubjectKind"
+      title="SRP 类型"
       width="auto"
       show-overflow="tooltip"
     ></VxeColumn>

@@ -67,18 +67,34 @@ const FIXED_ISK_BASE = new Map([
 ]);
 const DEFAULT_ISK_BASE = 15_000_000;
 
+const MAIL_SUBJECT_PATTERN = /(?<kind>军团|跟队|单浪)\s*SRP/i;
+export enum MAIL_SUBJECT_KIND {
+  CORPORATION = "军团",
+  SKIRMISH = "跟队",
+  SOLO = "单浪",
+  INVALID = "无效",
+}
+const SKIRMISH_ALLIANCE_SRP_LIMIT = 100_000_000;
+
 export class Decision<T extends DecisionKind> {
   constructor(
     public readonly iskBase: IfApprove<T, number, null>,
     public readonly iskModifier: IfApprove<T, number, null>,
+    public readonly iskBias: IfApprove<T, number, null>,
     public readonly needReview: boolean = false,
   ) {}
 
   public get mIskModified(): number | null {
-    if (this.iskBase === null || this.iskModifier === null) {
+    if (
+      this.iskBase === null ||
+      this.iskModifier === null ||
+      this.iskBias === null
+    )
       return null;
-    }
-    return Math.floor((this.iskBase * this.iskModifier) / 1_000_000);
+
+    return Math.floor(
+      Math.max(this.iskBase * this.iskModifier - this.iskBias, 0) / 1_000_000,
+    );
   }
 }
 
@@ -108,6 +124,7 @@ export class DecisionContext {
     // public readonly shipGroupNameEn: string,
     public readonly shipNameZh: string,
     // public readonly shipGroupNameZh?: string,
+    public readonly mailSubjectKind: MAIL_SUBJECT_KIND,
   ) {}
 
   public static async fetch(
@@ -144,6 +161,8 @@ export class DecisionContext {
       if (shipNames.zh) shipNameZh = shipNames.zh;
     }
 
+    const mailSubjectKind = getMailSubjectKind(killmail);
+
     return new this(
       victimName,
       victimIsChiGua,
@@ -155,6 +174,7 @@ export class DecisionContext {
       isInAutoSrp_,
       shipNameEn,
       shipNameZh,
+      mailSubjectKind,
     );
   }
 }
@@ -304,30 +324,38 @@ async function makeDecision(
   const esi = await buildEsiContext(accessToken);
   const context = await DecisionContext.fetch(esi, killmail);
 
-  if (!context.isShip) {
-    return [new Decision<Reject>(null, null), context];
-  }
+  const reject = () =>
+    [new Decision<Reject>(null, null, null), context] satisfies [
+      Decision<Reject>,
+      DecisionContext,
+    ];
+
+  if (context.mailSubjectKind === MAIL_SUBJECT_KIND.INVALID) return reject();
+  if (!context.isShip) return reject();
 
   if (context.victimIsChiGua) {
-    if (context.isNpcKill && !context.isDrifterKill)
-      return [new Decision<Reject>(null, null), context];
+    if (context.isNpcKill && !context.isDrifterKill) return reject();
     if (context.isInAutoSrp && !context.isNpcKill && !context.isDrifterKill)
-      return [new Decision<Reject>(null, null), context];
+      return reject();
 
     return [
       new Decision<Approve>(
         await fetchIskBase(killmail),
         getModifier(killmail),
+        getBias(context),
         isBcOrGreater(killmail),
       ),
       context,
     ];
   }
 
-  if (!context.issuerIsChiGuaFc)
-    return [new Decision<Reject>(null, null), context];
-  if (context.isNpcKill && !context.isDrifterKill)
-    return [new Decision<Reject>(null, null), context];
+  // Temporary placeholder for non-ChiGua SRPs. There should no longer be any
+  // non-ChiGua ones, but this else-branch is kept just in case, so we have to
+  // specify a placeholder value.
+  const ISK_BIAS = 0;
+
+  if (!context.issuerIsChiGuaFc) return reject();
+  if (context.isNpcKill && !context.isDrifterKill) return reject();
 
   const modifier = getModifier(killmail);
   if (modifier !== DEFAULT_MODIFIER) {
@@ -335,6 +363,7 @@ async function makeDecision(
       new Decision<Approve>(
         await fetchIskBase(killmail),
         modifier,
+        ISK_BIAS,
         isBcOrGreater(killmail),
       ),
       context,
@@ -343,12 +372,15 @@ async function makeDecision(
 
   const fixedIskBase = getFixedIskBase(killmail);
   if (fixedIskBase !== null)
-    return [new Decision<Approve>(fixedIskBase, 1), context];
+    return [new Decision<Approve>(fixedIskBase, 1, ISK_BIAS), context];
 
   const trueIskBase = await fetchIskBase(killmail);
   if (trueIskBase < DEFAULT_ISK_BASE)
-    return [new Decision<Approve>(trueIskBase, DEFAULT_MODIFIER), context];
-  return [new Decision<Approve>(DEFAULT_ISK_BASE, 1), context];
+    return [
+      new Decision<Approve>(trueIskBase, DEFAULT_MODIFIER, ISK_BIAS),
+      context,
+    ];
+  return [new Decision<Approve>(DEFAULT_ISK_BASE, 1, ISK_BIAS), context];
 }
 
 function isShip(killmail: Killmail): boolean {
@@ -379,6 +411,20 @@ function isBcOrGreater(killmail: Killmail): boolean {
   );
 }
 
+function getMailSubjectKind(killmail: Killmail): MAIL_SUBJECT_KIND {
+  const subject = killmail.pointer.report.subject;
+  if (!subject) return MAIL_SUBJECT_KIND.INVALID;
+
+  const match = MAIL_SUBJECT_PATTERN.exec(subject);
+  if (!match) return MAIL_SUBJECT_KIND.INVALID;
+
+  const kind = match.groups?.kind;
+  return (
+    Object.values(MAIL_SUBJECT_KIND).find((value) => value === kind) ??
+    MAIL_SUBJECT_KIND.INVALID
+  );
+}
+
 async function fetchIskBase(killmail: Killmail): Promise<number> {
   const shipTypeId = killmail.killmail.victim.ship_type_id;
   const killDate = new Date(killmail.killmail.killmail_time);
@@ -391,6 +437,12 @@ function getModifier(killmail: Killmail): number {
     ([marketGroupId, _]) => isTypeInMarketGroups(shipTypeId, [marketGroupId]),
   )?.[1];
   return specialModifier ?? DEFAULT_MODIFIER;
+}
+
+function getBias(context: DecisionContext): number {
+  if (context.mailSubjectKind === MAIL_SUBJECT_KIND.SKIRMISH)
+    return -SKIRMISH_ALLIANCE_SRP_LIMIT;
+  return 0;
 }
 
 function getFixedIskBase(killmail: Killmail): number | null {
