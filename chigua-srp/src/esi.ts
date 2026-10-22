@@ -22,7 +22,7 @@ const COOKIE_ACCESS_TOKEN = "esi-access-token";
 const COOKIE_REFRESH_TOKEN = "esi-refresh-token";
 const COOKIE_CHARACTER_NAME = "esi-character-name";
 const COOKIE_MAX_AGE = 1 * 60 * 60; // One hour
-const MAIL_LIST_NAME = "CHIGUA SRP";
+const MAIL_LIST_NAME = "CHIGUA NSRP";
 const SRP_OFFICER_CHARACTER_IDS = [
   2113450798, // peter li peter
   2113799332, // Cygnus Wall
