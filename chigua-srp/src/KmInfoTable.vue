@@ -22,6 +22,7 @@ interface Row {
   issuerName: string;
   killTime: Date;
   reportTime?: Date;
+  mailSubject?: string;
   mailSubjectKind?: MAIL_SUBJECT_KIND;
   mailBody?: string;
   tags: Tags;
@@ -121,6 +122,16 @@ const aggregateConfig = reactive<VxeTablePropTypes.AggregateConfig<Row>>({
         )
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return 0;
+  },
+});
+
+const tooltipConfig = reactive<VxeTablePropTypes.TooltipConfig<Row>>({
+  enterable: true,
+  contentMethod: ({ column, row }) => {
+    const { field } = column;
+    if (field === "mailSubjectKind") return row.mailSubject ?? "[空标题]";
+    // Default behavior for the other fields.
+    return null;
   },
 });
 
@@ -294,6 +305,7 @@ async function waitForExemptMIsk(
     :data="rows"
     :span-method="spanMethod"
     :aggregate-config="aggregateConfig"
+    :tooltip-config="tooltipConfig"
     @data-rendered="onDataRendered()"
   >
     <VxeColumn field="srpPayee" title="收款人" width="150" row-group-node>

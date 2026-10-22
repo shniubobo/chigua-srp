@@ -330,7 +330,6 @@ async function makeDecision(
       DecisionContext,
     ];
 
-  if (context.mailSubjectKind === MAIL_SUBJECT_KIND.INVALID) return reject();
   if (!context.isShip) return reject();
 
   if (context.victimIsChiGua) {
@@ -343,7 +342,8 @@ async function makeDecision(
         await fetchIskBase(killmail),
         getModifier(killmail),
         getBias(context),
-        isBcOrGreater(killmail),
+        isBcOrGreater(killmail) ||
+          context.mailSubjectKind === MAIL_SUBJECT_KIND.INVALID,
       ),
       context,
     ];
@@ -354,6 +354,7 @@ async function makeDecision(
   // specify a placeholder value.
   const ISK_BIAS = 0;
 
+  if (context.mailSubjectKind === MAIL_SUBJECT_KIND.INVALID) return reject();
   if (!context.issuerIsChiGuaFc) return reject();
   if (context.isNpcKill && !context.isDrifterKill) return reject();
 
