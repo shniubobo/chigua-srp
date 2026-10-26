@@ -64,6 +64,7 @@ const rows = computed<Row[]>(() =>
         issuerName: context.issuerName,
         killTime: new Date(killmail.killmail.killmail_time),
         reportTime: killmail.pointer.report.date,
+        mailSubject: killmail.pointer.report.subject,
         mailSubjectKind: context.mailSubjectKind,
         mailBody: killmail.pointer.report.bodyPlainText,
         tags: {
@@ -127,9 +128,15 @@ const aggregateConfig = reactive<VxeTablePropTypes.AggregateConfig<Row>>({
 
 const tooltipConfig = reactive<VxeTablePropTypes.TooltipConfig<Row>>({
   enterable: true,
+  enterDelay: 0,
+  leaveDelay: 0,
   contentMethod: ({ column, row }) => {
     const { field } = column;
-    if (field === "mailSubjectKind") return row.mailSubject ?? "[空标题]";
+    if (
+      field === "mailSubjectKind" &&
+      row.mailSubjectKind === MAIL_SUBJECT_KIND.INVALID
+    )
+      return row.mailSubject ?? "[空标题]";
     // Default behavior for the other fields.
     return null;
   },
