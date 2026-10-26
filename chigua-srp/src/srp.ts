@@ -93,7 +93,7 @@ export class Decision<T extends DecisionKind> {
       return null;
 
     return Math.floor(
-      Math.max(this.iskBase * this.iskModifier - this.iskBias, 0) / 1_000_000,
+      Math.max(this.iskBase * this.iskModifier + this.iskBias, 0) / 1_000_000,
     );
   }
 }
