@@ -36,14 +36,14 @@ const SHIPS = 4;
 
 const AUTO_SRP_SHIP_TYPE_IDS = [
   626, // Vexor
-  34317, // Confessor
-  35683, // Hecate
+  // 34317, // Confessor
+  // 35683, // Hecate
 ];
 const AUTO_SRP_MARKET_GROUP_IDS = [
-  1370, // Navy Cruisers
-  LOGISTICS_FRIGATES,
+  // 1370, // Navy Cruisers
+  // LOGISTICS_FRIGATES,
   INTERCEPTORS,
-  1065, // Electronic Attack Frigates
+  // 1065, // Electronic Attack Frigates
   INTERDICTORS,
   COMMAND_DESTROYERS,
 ];
